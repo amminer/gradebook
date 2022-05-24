@@ -1,4 +1,15 @@
 from Util import * #Util, List
+<<<<<<< HEAD
+=======
+
+""" CLASS GRADE
+Generalization of leaf classes Exam, Demo, and Asgmt.
+    Has int attributes pointsPossible and pointsEarned to represent a score,
+with a UI-entry-point edit function using Util.presentInterface and edit
+subroutines for both attrs (Likely to be overridden in leaf classes? TODO).
+
+"""
+>>>>>>> 967d5da6ea223f0269e66c6199379b2bf4653295
 
 class Grade(Util):
     
@@ -38,8 +49,6 @@ class Grade(Util):
         except ValueError:
             self.printBadInput(newPoints)
             self.editPEarned()
-        except RecursionError: #user cancels or recursion depth exceeded
-            pass #return to calling scope
 
     def editPPossible(self):
         print("Enter the new # of points possible:")
@@ -49,10 +58,9 @@ class Grade(Util):
         except ValueError:
             self.printBadInput(newPoints)
             self.editPPossible()
-        except RecursionError: #user cancels or recursion depth exceeded
-            pass #return to calling scope
 
     def edit(self):
+<<<<<<< HEAD
         self.presentInterface(
             "Would you like to edit the\n{name}, points {pos}sible,"
           + "or points {ear}ned?",
@@ -67,3 +75,24 @@ class Grade(Util):
             return False
         else
             return True
+=======
+        try:
+            choice:str = None
+            self.presentInterface(
+                "Would you like to edit the\n{name}, points {pos}sible,"
+            + "or points {ear}ned?",
+                ["name", "pos", "ear"],
+                [self.editName,
+                self.editPPossible,
+                self.editPEarned]
+            )
+        except ValueError:
+            self.printBadInput(choice)
+            self.edit()
+        except RecursionError: #user cancels or recursion depth exceeded
+            print("canceled!") #return to calling scope
+
+    def passes(self, percentageNeeded:float=60.0):
+        percentage = self.pointsEarned / self.pointsPossible * 100
+        return percentage >= percentageNeeded
+>>>>>>> 967d5da6ea223f0269e66c6199379b2bf4653295

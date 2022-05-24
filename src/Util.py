@@ -1,4 +1,12 @@
-from typing import List
+from typing import List, Callable
+
+""" CLASS UTIL
+contains name:str attribute w/ edit function,
+and basic methods needed by most other classes,
+    getStr, getPosInt, printBadInput,
+    and presentInterface for generalized menu-ing
+"""
+
 class Util():
     cursor = "~>"
 
@@ -13,6 +21,7 @@ class Util():
     def name(self, newName:str):
         self._name = newName
 
+    #must be called from leaf-class's edit() function!
     def editName(self):
         print("Enter a new name:")
         try:
@@ -22,7 +31,7 @@ class Util():
             self.printBadInput(newName)
             self.setName()
         except RecursionError: #user cancels or recursion depth exceeded
-            pass #return to calling scope
+            print("canceled!") #return to calling scope
 
     #float('inf') produces a number larger than all others
     def getPosInt(self, min:int=0, max:int=float('inf')) -> int:
@@ -42,11 +51,13 @@ class Util():
         return ret #TODO test
 
     def printBadInput(self, badInput:str="") -> None:
-        print("I can't believe you've done this..."
-            + "({} is bad input)".format(badInput)
-        )
+        output = ""
+        output += "I can't believe you've done this..."
+        if badInput != None:
+            output += "(\"{}\" is bad input)".format(badInput)
+        print(output)
         return #TODO
-    
+
         """ PRESENTINTERFACE
                 Takes a string prompt, a list of strings `options`, and
             a list of functions 'routines' which must be set up as parallel
@@ -56,13 +67,13 @@ class Util():
             based on the strings in the options list.
                 subroutines must take no args (for now? TODO)
         """ 
-    def presentInterface(self, prompt:str, options:List, routines:List):
+    def presentInterface(self, prompt:str, options:List[str], routines:List[Callable]):
         #TODO test
         print(prompt, self.cursor, sep='\n')
         for opt in options:
             print(opt)
         try:
-            choice = self.getStr(1);
+            choice = self.getStr();
             for opt in options:
                 if opt == choice:
                     routines[options.index(opt)]()  #call subroutine
