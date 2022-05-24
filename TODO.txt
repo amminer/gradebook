@@ -1,0 +1,3 @@
+[ ] Get gitlab repo set up
+[ ] Design discussion due Tuesday at 7pm
+[ ] Get back into python
