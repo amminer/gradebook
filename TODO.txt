@@ -1,8 +1,11 @@
 [X] Get gitlab repo set up
 NOTES:
-    git push origin main
+    *"no free lunch" moment, have to pay gitlab to host, should set up rpi server
+    *generate and add an ssh key for each new device you want to access the repo
+     from, using `ssh-keygen`
+    *git push origin main
         pushes the most recent commit to branch "main" to the remote repo
-    git pull origin main
+    *git pull origin main
         pulls the most recent version of main to the local repo
     edit and commit as per the usual, just don't forget to commit! Have fun!
 [ ] Design discussion due Tuesday at 7pm

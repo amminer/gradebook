@@ -1,11 +1,7 @@
 from Grade import *
 
-def main():
-    #just basic testing to make sure I understand syntax
-    g = Grade(76.5)
-    print(g)
-    g.setGradeFromUser()
-    print(g)
-
-
-main()
+class Gradebook(Util):
+    def __init__(self):
+        self.grades:List #of grades
+    
+    #TODO
