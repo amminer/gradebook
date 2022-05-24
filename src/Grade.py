@@ -1,4 +1,4 @@
-from Util import Util
+from Util import * #Util, List
 
 class Grade(Util):
     
@@ -61,3 +61,9 @@ class Grade(Util):
              self.editPPossible,
              self.editPEarned]
         )
+
+    def passes(self, percentageNeeded:float=60.0) -> bool:
+        if self.pointsEarned / self.pointsPossible * 100 < percentageNeeded:
+            return False
+        else
+            return True
