@@ -3,8 +3,8 @@ from Util import *
 class Grade(Util):
 
     def __init__(self):
-        self._percent = -1.0
-        self._name = "NOT SET"
+        self._percent:float = -1.0
+        self._name:str = "NOT SET"
 
     def __init__(self, newPercent:float):
         self._percent = newPercent
