@@ -19,7 +19,8 @@ class Util():
 
     @name.setter
     def name(self, newName:str):
-        self._name = newName
+        if len(newName) > 0:
+            self._name = str(newName)
 
     #must be called from leaf-class's edit() function!
     def editName(self):
