@@ -8,9 +8,15 @@ NOTES:
     *git pull origin main
         pulls the most recent version of main to the local repo
     edit and commit as per the usual, just don't forget to commit! Have fun!
+<<<<<<< HEAD
 [/] Design discussion due Tuesday at 7pm
 [/] Get back into python
 [ ] pytest!!!
+=======
+[X] Get back into python
+[ ] Think up some member functions - Design discussion due Tuesday at 7pm
+[ ] Start working on pytest stuff
+>>>>>>> 38925979dd6c5e087e6f429b81aa07eceb87144a
 [ ] Learn vscode symbols/documentation habits
 [/] Core hierarchy
 [ ] BST
