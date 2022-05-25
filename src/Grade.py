@@ -95,7 +95,15 @@ class Asgmt(Grade):
     #TODO
     def __init__(self):
         super().__init__()
-        #self.stages:List[Grade] = [Grade(...) #TODO
+        #       0           1           2           3           4           5
+        #discussion1, draftheaders, discussion2, progsub1, progsub2, finalsub&writeups
+        self.stages:List[Grade] = [Grade("discussion post 1", pointsPossible = 5),
+                                   Grade("draft headers", pointsPossible = 5),
+                                   Grade("discussion post 2", pointsPossible = 5),
+                                   Grade("progress submission 1", pointsPossible = 10),
+                                   Grade("progress submission 2", pointsPossible = 10),
+                                   Grade("final submission and writeups", pointsPossible = 100)]
+
 
 class Demo(Grade):
     #TODO
