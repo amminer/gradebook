@@ -9,10 +9,11 @@ NOTES:
         pulls the most recent version of main to the local repo
     edit and commit as per the usual, just don't forget to commit! Have fun!
 [X] Get back into python
-[ ] Think up some member functions - Design discussion due Tuesday at 7pm
-[ ] Start working on pytest stuff
-[ ] Learn vscode symbols/documentation habits
+[x] Think up some member functions - Design discussion due Tuesday at 7pm
+[X] Start working on pytest stuff
+[ ] Learn vscode symbols/documentation habit
 [/] Core hierarchy
-[ ] BST
+[ ] LLL
 [ ] Mgr
+[ ] BST
 [ ] etc...

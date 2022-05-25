@@ -43,7 +43,7 @@ class Grade(Util):
         if 0 <= newPoints <= self.pointsPossible:
             self._pointsEarned = newPoints
 
-    def editPEarned(self):
+    def editPEarned(self) -> None:
         print("Enter the new # of points earned (must be <= points possible):")
         try:
             newPoints = self.getPosInt() #could pass in self.pointsPossible as max
@@ -52,7 +52,7 @@ class Grade(Util):
             self.printBadInput(newPoints)
             self.editPEarned()
 
-    def editPPossible(self):
+    def editPPossible(self) -> None:
         print("Enter the new # of points possible:")
         try:
             newPoints = self.getPosInt()
@@ -61,7 +61,7 @@ class Grade(Util):
             self.printBadInput(newPoints)
             self.editPPossible()
 
-    def edit(self):
+    def edit(self) -> None:
         try:
             choice:str = None
             self.presentInterface(
@@ -78,14 +78,32 @@ class Grade(Util):
         except RecursionError: #user cancels or recursion depth exceeded
             print("canceled!") #return to calling scope
 
-    def passes(self, percentageNeeded:float=60.0):
-        if percentageNeeded < 0: percentageNeeded = 0.0
-        elif percentageNeeded > 100: percentageNeeded = 100.0
+    #should give an option for +/- system?
+    def getLetter(self) -> str:
+        percentage = self.getPercentage()
+        if 0 <= percentage < 60:
+            return 'F'
+        elif 60 <= percentage < 70:
+            return 'D'
+        elif 70 <= percentage < 80:
+            return 'C'
+        elif 80 <= percentage < 90:
+            return 'B'
+        elif 90 <= percentage < 100:
+            return 'A'
+
+    def getPercentage(self) -> float:
         if self.pointsPossible == 0:
             percentage = 0.0
         else:
             percentage = self.pointsEarned / self.pointsPossible * 100
-        return percentage >= percentageNeeded
+        return percentage
+
+    def passes(self, percentageNeeded:float=60.0) -> bool:
+        if percentageNeeded < 0: percentageNeeded = 0.0
+        elif percentageNeeded > 100: percentageNeeded = 100.0
+        return self.getPercentage() >= percentageNeeded
+        
 
 class Exam(Grade):
     #TODO

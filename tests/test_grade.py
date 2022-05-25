@@ -3,6 +3,9 @@ from Grade import Grade
 from random import randint
 g = Grade()
 
+#def test_getPercentage() -> None: TODO
+#def test_getLetter() -> None: TODO
+
 def test_points() -> None:
     for i in range(999999):
             i = randint(-999999999,999999999)
