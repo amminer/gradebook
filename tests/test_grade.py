@@ -16,18 +16,6 @@ def test_passes():
     gs = [Grade("midterm one", pointsPossible=20, pointsEarned=15),
           Grade("midterm two", pointsPossible=20, pointsEarned=9),
           Grade("some quiz", 10, 6)]
-<<<<<<< HEAD
-    assert(gs[0].passes())
-    assert(gs[2].passes())
-    assert(not gs[1].passes())
-
-def main():
-    #testEdit()
-    test_passes()
-
-main()
-=======
     assert      gs[0].passes()
     assert      gs[2].passes()
     assert not  gs[1].passes()
->>>>>>> 38925979dd6c5e087e6f429b81aa07eceb87144a
