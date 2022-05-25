@@ -1,6 +1,4 @@
 from Util import * #Util, List
-<<<<<<< HEAD
-=======
 
 """ CLASS GRADE
 Generalization of leaf classes Exam, Demo, and Asgmt.
@@ -9,12 +7,11 @@ with a UI-entry-point edit function using Util.presentInterface and edit
 subroutines for both attrs (Likely to be overridden in leaf classes? TODO).
 
 """
->>>>>>> 967d5da6ea223f0269e66c6199379b2bf4653295
 
 class Grade(Util):
     
-    def __init__(self, name:str="NOT SET", pointsPossible:int=-1,
-                pointsEarned:int=-1):
+    def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
+                pointsEarned:int=0):
         super().__init__(name)
         self.pointsPossible = pointsPossible
         self.pointsEarned = pointsEarned
@@ -29,7 +26,11 @@ class Grade(Util):
 
     @pointsPossible.setter
     def pointsPossible(self, newPoints:int):
-        self._pointsPossible = newPoints
+        #TODO should I be printing here or raising?
+        if newPoints < 0:
+            print("Negative values not allowed")
+        else:
+            self._pointsPossible = newPoints
 
     @property
     def pointsEarned(self):
@@ -37,12 +38,16 @@ class Grade(Util):
 
     @pointsEarned.setter
     def pointsEarned(self, newPoints:int):
-        if (newPoints > self.pointsPossible):
-            raise ValueError
-        self._pointsEarned = newPoints
+        #TODO should I be printing here or raising?
+        if newPoints > self.pointsPossible:
+            print("Points earned cannot be greater than points possible")
+        elif newPoints < 0:
+            print("Negative values not allowed")
+        else:
+            self._pointsEarned = newPoints
 
     def editPEarned(self):
-        print("Enter the new # of points earned (must be <= possible):")
+        print("Enter the new # of points earned (must be <= points possible):")
         try:
             newPoints = self.getPosInt() #could pass in self.pointsPossible as max
             self.pointsEarned = newPoints
@@ -60,22 +65,6 @@ class Grade(Util):
             self.editPPossible()
 
     def edit(self):
-<<<<<<< HEAD
-        self.presentInterface(
-            "Would you like to edit the\n{name}, points {pos}sible,"
-          + "or points {ear}ned?",
-            ["name", "pos", "ear"],
-            [self.editName,
-             self.editPPossible,
-             self.editPEarned]
-        )
-
-    def passes(self, percentageNeeded:float=60.0) -> bool:
-        if self.pointsEarned / self.pointsPossible * 100 < percentageNeeded:
-            return False
-        else
-            return True
-=======
         try:
             choice:str = None
             self.presentInterface(
@@ -95,4 +84,3 @@ class Grade(Util):
     def passes(self, percentageNeeded:float=60.0):
         percentage = self.pointsEarned / self.pointsPossible * 100
         return percentage >= percentageNeeded
->>>>>>> 967d5da6ea223f0269e66c6199379b2bf4653295
