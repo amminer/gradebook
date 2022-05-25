@@ -6,6 +6,6 @@ from Grade import * #Grade, Util.*
 
 class Gradebook(Util):
     def __init__(self):
-        self.grades:List[Grade] #of grades
+        self.grades:List[Grade]
     
     #TODO

@@ -9,6 +9,9 @@ subroutines for both attrs (Likely to be overridden in leaf classes? TODO).
 """
 
 class Grade(Util):
+    #TODO: think of more methods/"jobs"
+    #any way to make this const per class/instance?
+    countsTowardFinal = True #TODO use in gradebook, set False in Demo
     
     def __init__(self, name:str="NOT SET", pointsPossible:int=-1,
                 pointsEarned:int=-1):
@@ -76,3 +79,17 @@ class Grade(Util):
     def passes(self, percentageNeeded:float=60.0):
         percentage = self.pointsEarned / self.pointsPossible * 100
         return percentage >= percentageNeeded
+
+class Exam(Grade):
+    #TODO
+    pass
+
+class Asgmt(Grade):
+    #TODO
+    def __init__(self):
+        super().__init__()
+        #self.stages:List[Grade] = [Grade(...) #TODO
+
+class Demo(Grade):
+    #TODO
+    pass
