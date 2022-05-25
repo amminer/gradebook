@@ -16,8 +16,8 @@ class Grade(Util):
     def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
                 pointsEarned:int=0):
         super().__init__(name)
-        self.pointsPossible = pointsPossible
-        self.pointsEarned = pointsEarned
+        self._pointsPossible = pointsPossible
+        self._pointsEarned = pointsEarned
 
     def __str__(self):
         return "Current grade for " + self.name + ": " + str(self.pointsEarned) \
@@ -30,9 +30,7 @@ class Grade(Util):
     @pointsPossible.setter
     def pointsPossible(self, newPoints:int):
         #TODO should I be printing here or raising?
-        if newPoints < 0:
-            print("Negative values not allowed")
-        else:
+        if newPoints >= self.pointsEarned >= 0:
             self._pointsPossible = newPoints
 
     @property
@@ -42,11 +40,7 @@ class Grade(Util):
     @pointsEarned.setter
     def pointsEarned(self, newPoints:int):
         #TODO should I be printing here or raising?
-        if newPoints > self.pointsPossible:
-            print("Points earned cannot be greater than points possible")
-        elif newPoints < 0:
-            print("Negative values not allowed")
-        else:
+        if 0 <= newPoints <= self.pointsPossible:
             self._pointsEarned = newPoints
 
     def editPEarned(self):
@@ -85,7 +79,12 @@ class Grade(Util):
             print("canceled!") #return to calling scope
 
     def passes(self, percentageNeeded:float=60.0):
-        percentage = self.pointsEarned / self.pointsPossible * 100
+        if percentageNeeded < 0: percentageNeeded = 0.0
+        elif percentageNeeded > 100: percentageNeeded = 100.0
+        if self.pointsPossible == 0:
+            percentage = 0.0
+        else:
+            percentage = self.pointsEarned / self.pointsPossible * 100
         return percentage >= percentageNeeded
 
 class Exam(Grade):
