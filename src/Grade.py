@@ -87,7 +87,6 @@ class Grade(Util):
     def passes(self, percentageNeeded:float=60.0):
         percentage = self.pointsEarned / self.pointsPossible * 100
         return percentage >= percentageNeeded
-<<<<<<< HEAD
 
 class Exam(Grade):
     #TODO
@@ -102,5 +101,3 @@ class Asgmt(Grade):
 class Demo(Grade):
     #TODO
     pass
-=======
->>>>>>> 38925979dd6c5e087e6f429b81aa07eceb87144a
