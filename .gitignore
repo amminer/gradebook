@@ -6,3 +6,5 @@ tests/__pycache__/test_util.cpython-38-PYTEST.pyc
 tests/__pycache__/__init__.cpython-38.pyc
 tests/__pycache__/test_grade.cpython-38-PYTEST.pyc
 *.pyc
+tests/__pycache__/test_grade.cpython-38-PYTEST.pyc
+tests/__pycache__/test_grade.cpython-38-PYTEST.pyc

@@ -20,8 +20,18 @@ class Grade(Util):
         self._pointsEarned = pointsEarned
 
     def __str__(self):
-        return "Current grade for " + self.name + ": " + str(self.pointsEarned) \
-             + " out of " + str(self.pointsPossible)
+        ret = self.name + ':'
+        nameLen = len(self.name) + 1 #1 for colon
+        numTabs = 5 #TODO change?
+        while nameLen >= 8:
+            numTabs -= 1
+            nameLen -= 8
+            if numTabs == 0:
+                break
+        ret += '\t' * numTabs
+        ret += str(self.pointsEarned)   + '/' \
+             + str(self.pointsPossible) + " points"
+        return ret
     
     @property
     def pointsPossible(self):
@@ -110,9 +120,9 @@ class Exam(Grade):
     pass
 
 class Asgmt(Grade):
-    #TODO
-    def __init__(self):
-        super().__init__()
+
+    #points possible always same for asgmts
+    def __init__(self, name:str="NOT SET", pointsEarned:int=0):
         #       0           1           2           3           4           5
         #discussion1, draftheaders, discussion2, progsub1, progsub2, finalsub&writeups
         self.stages:List[Grade] = [Grade("discussion post 1", pointsPossible = 5),
@@ -121,7 +131,17 @@ class Asgmt(Grade):
                                    Grade("progress submission 1", pointsPossible = 10),
                                    Grade("progress submission 2", pointsPossible = 10),
                                    Grade("final submission and writeups", pointsPossible = 100)]
+        super().__init__(
+            name,
+            sum([g.pointsPossible for g in self.stages]),
+            pointsEarned
+        )
 
+    def __str__(self):
+        ret = super().__str__() + "\nStages:\n"
+        for grade in self.stages:
+            ret += str(grade) + '\n'
+        return ret
 
 class Demo(Grade):
     #TODO

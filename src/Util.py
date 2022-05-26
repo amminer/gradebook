@@ -24,7 +24,9 @@ class Util():
 
     #must be called from leaf-class's edit() function!
     def editName(self):
-        print("Enter a new name:")
+        print("Enter a new name" 
+            + "(recommended maximum of 39 characters for display integrity)",
+              sep = '\n')
         try:
             newName = self.getStr(1)
             self.name = newName
