@@ -16,4 +16,5 @@ NOTES:
 [ ] LLL
 [ ] Mgr
 [ ] BST
-[ ] etc...
+[ ] parameterized pytests?
+
