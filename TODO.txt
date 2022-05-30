@@ -13,6 +13,19 @@ NOTES:
 [X] Start working on pytest stuff
 [ ] Learn vscode symbols/documentation habit
 [/] Core hierarchy
+    [ ] Grade (base)
+        [ ] GetLetter
+        [ ] GetPercentage
+        [ ] Passes
+    [ ] Asgmt
+        [ ] ?
+    [ ] Demo
+        [ ] GetLetter (overload)
+        [ ] Passes (overload) (???)
+        [ ] Retake (second attempts allowed - need to research IRL behavior)
+    [ ] Exam
+        [ ] Practice (uses internal questions dict?)
+        [ ] ?
 [ ] LLL
 [ ] Mgr
 [ ] BST

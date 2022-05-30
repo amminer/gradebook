@@ -4,14 +4,15 @@ from Util import * #Util, List
 Generalization of leaf classes Exam, Demo, and Asgmt.
     Has int attributes pointsPossible and pointsEarned to represent a score,
 with a UI-entry-point edit function using Util.presentInterface and edit
-subroutines for both attrs (Likely to be overridden in leaf classes? TODO).
+subroutines for both attrs (Likely to be overridden in leaf classes? todo).
 
 """
 
+#~~~~~~~~~~~~~~~~~~~~~~~CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
 class Grade(Util):
-    #TODO: think of more methods/"jobs"
     #any way to make this const per class/instance?
-    countsTowardFinal = True #TODO use in gradebook, set False in Demo
+    countsTowardFinal = True #todo use in gradebook, set False in Demo
     
     def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
                 pointsEarned:int=0):
@@ -22,7 +23,7 @@ class Grade(Util):
     def __str__(self):
         ret = self.name + ':'
         nameLen = len(self.name) + 1 #1 for colon
-        numTabs = 5 #TODO change?
+        numTabs = 5 #todo change?
         while nameLen >= 8:
             numTabs -= 1
             nameLen -= 8
@@ -39,7 +40,7 @@ class Grade(Util):
 
     @pointsPossible.setter
     def pointsPossible(self, newPoints:int):
-        #TODO should I be printing here or raising?
+        #todo should I be printing here or raising?
         if newPoints >= self.pointsEarned >= 0:
             self._pointsPossible = newPoints
 
@@ -49,7 +50,7 @@ class Grade(Util):
 
     @pointsEarned.setter
     def pointsEarned(self, newPoints:int):
-        #TODO should I be printing here or raising?
+        #todo should I be printing here or raising?
         if 0 <= newPoints <= self.pointsPossible:
             self._pointsEarned = newPoints
 
@@ -114,13 +115,15 @@ class Grade(Util):
         elif percentageNeeded > 100: percentageNeeded = 100.0
         return self.getPercentage() >= percentageNeeded
         
+class Exam(Grade): #TODO
+    def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
+                pointsEarned:int=0, questions:Dict[str,str]={}):
+        self.questions:Dict[str,str] = questions
 
-class Exam(Grade):
-    #TODO
-    pass
+#~~~~~~~~~~~~~~~~~~~END CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-class Asgmt(Grade):
-
+class Asgmt(Grade): #TODO
     #points possible always same for asgmts
     def __init__(self, name:str="NOT SET", pointsEarned:int=0):
         #       0           1           2           3           4           5
@@ -143,6 +146,11 @@ class Asgmt(Grade):
             ret += str(grade) + '\n'
         return ret
 
-class Demo(Grade):
-    #TODO
-    pass
+#~~~~~~~~~~~~~~~~~~~END CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+class Demo(Grade): #TODO
+    def __init__(self):
+        pass
+
+#~~~~~~~~~~~~~~~~~~~END CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

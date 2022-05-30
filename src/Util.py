@@ -1,10 +1,11 @@
-from typing import List, Callable
+from typing import List, Dict, Callable
 
 """ CLASS UTIL
 contains name:str attribute w/ edit function,
 and basic methods needed by most other classes,
-    getStr, getPosInt, printBadInput,
-    and presentInterface for generalized menu-ing
+
+getStr, getPosInt, printBadInput,
+and presentInterface for generalized menu-ing
 """
 
 class Util():
