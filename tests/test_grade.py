@@ -1,7 +1,6 @@
 import __init__
 from random import randint
 from Grade import Grade
-g = Grade()
 
 def test_getPercentage() -> None:
     gs = [Grade(pointsPossible=i, pointsEarned = randint(0,i)) for i in range(1,1000)]
@@ -26,6 +25,7 @@ def test_getLetter() -> None:
             assert False #something is wrong with getPercentage
 
 def test_points() -> None:
+    g = Grade()
     for i in range(999999):
             i = randint(-999999999,999999999)
             j = randint(-999999999,999999999)

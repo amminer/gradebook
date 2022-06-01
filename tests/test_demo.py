@@ -1,9 +1,9 @@
 import __init__
 from random import randint
 from Grade import Demo
-gs = [Demo(pointsEarned = randint(0,20)) for i in range(1,1000)]
 
 def test_getLetter() -> None:
+    gs = [Demo(pointsEarned = randint(0,20)) for i in range(1,1000)]
     for g in gs:
         if g.getPercentage() >= 90:
             assert g.getLetter() == 'E'
@@ -19,6 +19,7 @@ def test_getLetter() -> None:
             assert False #something is wrong with getPercentage
 
 def test_needRetake() -> None:
+    gs = [Demo(pointsEarned = randint(0,20)) for i in range(1,1000)]
     for g in gs:
         if g.getLetter() == "IP":
             assert g.needsRetake()
@@ -26,7 +27,8 @@ def test_needRetake() -> None:
             assert not g.needsRetake()
 
 def t_retake() -> None:
-#TODO monkeypatch?
+    gs = [Demo(pointsEarned = randint(0,20)) for i in range(1,100)]
+    #TODO monkeypatch?
     for g in gs:
         g.retake()
         print("New score is", g.pointsEarned)

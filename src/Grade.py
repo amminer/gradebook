@@ -147,19 +147,29 @@ class Grade(Util):
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
         
 class Exam(Grade): #TODO
-    def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
-                pointsEarned:int=0, questions:Dict[str,str]={}):
+    def __init__(self, name:str="NOT SET",
+                 pointsPossible:int=float('inf'), pointsEarned:int=0,
+                 questions:Dict[str,str]={}, extraCredit=False):
         self.questions:Dict[str,str] = questions
+        self.extraCredit = extraCredit
+        super().__init__(name, pointsPossible=pointsPossible,
+                         pointsEarned=pointsEarned)
 
-#TODO def __str__
+    def getPercentage(self) -> float:
+        ret:float = super().getPercentage()
+        if self.extraCredit:
+            ret += 5.0
+        return ret
 
-#TODO def addMissedQuestion
+    #TODO def __str__
 
-#TODO def removeMissedQuestion
+    #TODO def addMissedQuestion
 
-#TODO def editMissedQuestions
+    #TODO def removeMissedQuestion
 
-#TODO def practice
+    #TODO def editMissedQuestions
+
+    #TODO def practice
 
 #~~~~~~~~~~~~~~~~~~~END CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 

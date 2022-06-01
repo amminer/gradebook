@@ -9,4 +9,8 @@ def test_next():
         n.next = ns[randint(0, len(ns)-1)]
         assert n.next != None
 
-#No need to test data since no filtering?...
+def test_data():
+    for n in ns:
+        n.data = randint(0,1000)
+    assert all([n.data != None for n in ns])
+
