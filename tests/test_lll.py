@@ -40,15 +40,20 @@ def test_at():
         assert True
     #TODO automate
     
-def remove(self):
-    pass #TODO
+def test_remove():
+    l = LLL()
+    l.pushBack("a")
+    l.pushBack("b")
+    l.pushBack("c")
+    l.remove("b")
+    assert l.at(0) == "a"
+    assert l.at(1) == "c"
+    assert len(l) == 2
     #TODO automate
 
 def lookup(self):
     pass #TODO
     #TODO automate
 
-"""
 if __name__ == "__main__":
-    test_at()
-"""
+    test_remove()

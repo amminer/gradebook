@@ -5,6 +5,9 @@ class Node():
         self.next = None
         self.data = newData
 
+    def __del__(self):
+        self = None
+
     def __str__(self):
         return self.data
     
@@ -57,17 +60,17 @@ class LLL():
 
     #should do __getitem__, but don't want to deal with multiple returns yet
     def at(self, index:int): #returns Node's data type...
-        ret = self._getAtRecursive(index, self.head)
+        ret = self._getAtRecursive(self.head, index)
         if type(ret) == bool and not ret: #don't want to accidentally
             raise IndexError(f"Index {index} out of range!") #catch falsy
         return ret
-    def _getAtRecursive(self, index:int, thisNode:Node):
+    def _getAtRecursive(self, thisNode:Node, index:int):
         if not thisNode or index < 0:
             return False
         elif index == 0:
             return thisNode.data
         else:
-            return self._getAtRecursive(index - 1, thisNode.next)
+            return self._getAtRecursive(thisNode.next, index - 1)
 
     def pushBack(self, newData):
         if not self.head:
@@ -79,8 +82,30 @@ class LLL():
         if not thisNode.next:
             thisNode.next = Node(newData)
         else:
-            self.pushBackRecursive(thisNode.next, newData)
+            self._pushBackRecursive(thisNode.next, newData)
 
-    #TODO def remove(self):
+    def remove(self, key):
+        thatPrev, thatOne = self._findRecursive(self.head, key)
+        if type(thatOne) == bool and not thatOne:
+            raise IndexError(f"{key} not found in list")
+        self._remove(thatPrev, thatOne)
+    def _findRecursive(self, thisNode:Node, key):
+        if not thisNode.next:
+            if thisNode.data == key:
+                return None, thisNode 
+            return False, False
+        elif thisNode.next.data == key:
+            return thisNode, thisNode.next
+        else:
+            return self._findRecursive(thisNode.next, key)
+    #thatPrev may == None
+    def _remove(self, thatPrev:Node, thatNode:Node):
+        if not thatPrev:            #case head
+            self.head = thatNode
+        elif not thatNode.next:     #case tail
+            thatPrev.next = None
+        else:                       #case sandwiched
+            thatPrev.next = thatNode.next
+        del thatNode #is this needed?
 
     #TODO def lookup(self):
