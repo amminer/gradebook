@@ -8,13 +8,9 @@ GIT NOTES:
     *git pull origin main
         pulls the most recent version of main to the local repo
     edit and commit as per the usual, just don't forget to commit! Have fun!
-[ ] Learn vscode symbols/documentation habit
-[Y] Core hierarchy
-    [ ] Asgmt
-        [ ] Setup (override)
-        [ ] ?
-        [ ] ?
-[/] LLL
+[...] Learn vscode symbols/documentation habit
+[X] Core hierarchy
+[Y] Node/LLL
 [ ] Student
 [ ] parameterized pytests?
 [ ] pytest fixtures?
