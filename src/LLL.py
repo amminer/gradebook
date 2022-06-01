@@ -58,8 +58,8 @@ class LLL():
     #should do __getitem__, but don't want to deal with multiple returns yet
     def at(self, index:int): #returns Node's data type...
         ret = self._getAtRecursive(index, self.head)
-        if not ret:
-            raise IndexError(f"Index {index} out of range!")
+        if type(ret) == bool and not ret: #don't want to accidentally
+            raise IndexError(f"Index {index} out of range!") #catch falsy
         return ret
     def _getAtRecursive(self, index:int, thisNode:Node):
         if not thisNode or index < 0:

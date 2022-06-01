@@ -7,6 +7,7 @@ def test_init_str():
     assert not l #empty LLL is falsy
     assert l.head == None
     assert l.__str__() == "List is empty"
+    #TODO automate
 
 #also tests __len__
 def test_pushBack():
@@ -17,6 +18,7 @@ def test_pushBack():
     assert len(l) == 1
     l.pushBack("Another thing")
     assert len(l) == 2
+    #TODO automate
 
 def test_at():
     l = LLL()
@@ -36,12 +38,15 @@ def test_at():
     except IndexError as ie:
         print(ie)
         assert True
+    #TODO automate
     
 def remove(self):
     pass #TODO
+    #TODO automate
 
 def lookup(self):
     pass #TODO
+    #TODO automate
 
 """
 if __name__ == "__main__":
