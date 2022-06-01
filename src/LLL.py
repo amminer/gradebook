@@ -48,27 +48,26 @@ class LLL():
                              self.strRecursive(head.next, ret))
 
     def __len__(self):
-        return self._countNodes(self.head)
-    def _countNodes(self, thisNode:Node) -> int:
+        return self._countNodesRecursive(self.head)
+    def _countNodesRecursive(self, thisNode:Node) -> int:
         if not thisNode:
             return 0
         else:
-            return 1 + self._countNodes(thisNode.next)
+            return 1 + self._countNodesRecursive(thisNode.next)
 
     #should do __getitem__, but don't want to deal with multiple returns yet
     def at(self, index:int): #returns Node's data type...
-        ret = self.getAtRecursive(index, self.head)
+        ret = self._getAtRecursive(index, self.head)
         if not ret:
             raise IndexError(f"Index {index} out of range!")
         return ret
-    def getAtRecursive(self, index:int, thisNode:Node):
+    def _getAtRecursive(self, index:int, thisNode:Node):
         if not thisNode or index < 0:
             return False
         elif index == 0:
             return thisNode.data
         else:
-            return self.getAtRecursive(index - 1, thisNode.next)
-
+            return self._getAtRecursive(index - 1, thisNode.next)
 
     def pushBack(self, newData):
         if not self.head:
