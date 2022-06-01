@@ -32,22 +32,22 @@ class Util():
         try:
             newName = self.getStr(1)
             self.name = newName
-        except ValueError:
-            self.printBadInput(newName)
+        except ValueError as ve:
+            print(ve)
             self.setName()
-        except RecursionError: #user cancels or recursion depth exceeded
-            print("canceled!") #return to calling scope
+        except RecursionError as re: #user cancels or recursion depth exceeded
+            print(re) #return to calling scope
 
     #may throw RecursionError or ValueError
     #(float('inf') produces a number larger than all others)
     def getPosInt(self, min:int=0, max:int=float('inf')) -> int:
-        ret = input(self.cursor)                #!may raise VE
+        ret = input(self.cursor)
         if ret == "!q":
-            raise RecursionError                #is this appropriate?
+            raise RecursionError("Canceled!")
         else:
             ret = int(ret)
         if ret < min or ret > max:
-            raise ValueError                        #!may raise VE
+            raise ValueError(f"Input must be between {min} and {max} inclusive")
         return ret #TODO test
     
     def getStr(self, min:int=0) -> str:
@@ -55,7 +55,7 @@ class Util():
         if ret == "!q":
             raise RecursionError                #is this appropriate?
         if len(ret) < min:
-            raise ValueError                        #!may raise VE
+            raise ValueError(f"Input must be at least {min} characters")
         return ret #TODO test
 
     def printBadInput(self, badInput:str="") -> None:
@@ -77,7 +77,8 @@ class Util():
         """ 
     #May raise a RE that must be handled in client code!
     #Handles own ValueErrs
-    def presentInterface(self, prompt:str, options:List[str], routines:List[Callable]):
+    def presentInterface(self, prompt:str, options:List[str],
+                         routines:List[Callable]):
         #TODO test
         print(prompt, self.cursor, sep='\n')
         for opt in options:
@@ -89,7 +90,7 @@ class Util():
                     routines[options.index(opt)]()  #call subroutine
                     break
             else: #only executes if break is not reached
-                raise ValueError
-        except ValueError:
-                self.printBadInput(choice)          #recurse
+                raise ValueError(f"{choice} is not a valid option")
+        except ValueError as ve:
+                print(ve)
                 self.presentInterface(prompt, options, routines)

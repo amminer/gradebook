@@ -52,6 +52,13 @@ def test_passes() -> None:
             else:
                 assert not g.passes(i)
 
+def t_setup():
+    g = Grade()
+    if g.setup():
+        print(g)
+    else:
+        pass #should print about cancellation from obj
+
 #Obsolete to test_points
 """
 def test_pointsPossible() -> None:
@@ -69,3 +76,6 @@ def test_pointsEarned() -> None:
         assert g.pointsEarned >= 0
         assert g.pointsEarned <= g.pointsPossible
 """
+
+if __name__ == "__main__":
+    t_setup()
