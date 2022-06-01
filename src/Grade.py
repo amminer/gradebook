@@ -1,4 +1,5 @@
 from Util import * #Util, List
+from random import shuffle
 
 """ CLASS GRADE
 Generalization of leaf classes Exam, Demo, and Asgmt.
@@ -218,7 +219,9 @@ class Exam(Grade):
         answer:str = ""
         if not self.questions:
             print("Nothing to practice!")
-        for q in self.questions.items():
+        questions = list(self.questions.items()) #make a copy
+        shuffle(questions) #mix it up
+        for q in questions:
             print(q[0])
             print("Enter your answer:")
             try:
