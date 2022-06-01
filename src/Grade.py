@@ -1,4 +1,3 @@
-from audioop import getsample
 from Util import * #Util, List
 
 """ CLASS GRADE
@@ -241,7 +240,7 @@ class Exam(Grade):
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-class Asgmt(Grade): #TODO
+class Asgmt(Grade):
     #points possible always same for asgmts
     def __init__(self, name:str="NOT SET", pointsEarned:int=0):
         #     0          1           2           3           4          5
@@ -280,7 +279,7 @@ class Asgmt(Grade): #TODO
                     continue
                 print(f"For {g.name}, enter the number of points earned "
                     + f"out of {g.pointsPossible}:")
-                choice = self.getPosInt(max=g.pointsPossible) #TODO unnecessary max?
+                choice = self.getPosInt(max=g.pointsPossible) #unnecessary max?
                 g.pointsEarned = choice
         except RecursionError as re:
             print(re)
