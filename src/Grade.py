@@ -5,10 +5,11 @@ Generalization of leaf classes Exam, Demo, and Asgmt.
     Has int attributes pointsPossible and pointsEarned to represent a score,
 with a UI-entry-point edit function using Util.presentInterface and edit
 subroutines for both attrs (Likely to be overridden in leaf classes? todo).
-
 """
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+""" Expects minimum pointsPossible of 1 (0? todo)
+"""
 
 class Grade(Util):
     #any way to make this const per class/instance?
@@ -31,7 +32,8 @@ class Grade(Util):
                 break
         ret += '\t' * numTabs
         ret += str(self.pointsEarned)   + '/' \
-             + str(self.pointsPossible) + " points"
+             + str(self.pointsPossible) + " points (" \
+             + self.getLetter() + ')'
         return ret
     
     @property
@@ -40,9 +42,11 @@ class Grade(Util):
 
     @pointsPossible.setter
     def pointsPossible(self, newPoints:int):
-        #todo should I be printing here or raising?
         if newPoints >= self.pointsEarned >= 0:
             self._pointsPossible = newPoints
+        else:
+            raise ValueError("Invalid # of points possible (must be at least",
+                             str(self.pointsEarned) + ')')
 
     @property
     def pointsEarned(self):
@@ -50,32 +54,54 @@ class Grade(Util):
 
     @pointsEarned.setter
     def pointsEarned(self, newPoints:int):
-        #todo should I be printing here or raising?
         if 0 <= newPoints <= self.pointsPossible:
             self._pointsEarned = newPoints
+        else:
+            raise ValueError("Invalid # of points earned (must be at most",
+                             str(self.pointsPossible), ')')
 
+    """ removed - only need to edit on Exam.retake
     def editPEarned(self) -> None:
-        print("Enter the new # of points earned (must be <= points possible):")
+        print("Enter the new # of points earned, or !q to cancel",
+              "(must be <= points possible):")
         try:
             newPoints = self.getPosInt() #could pass in self.pointsPossible as max
             self.pointsEarned = newPoints
         except ValueError:
             self.printBadInput(newPoints)
             self.editPEarned()
+        except RecursionError: #user cancels or recursion depth exceeded
+            print("canceled!") #return to calling scope
+    """
 
+    """ removed - only need to edit on Exam.retake
     def editPPossible(self) -> None:
-        print("Enter the new # of points possible:")
+        print("Enter the new # of points possible, or !q to cancel:")
         try:
             newPoints = self.getPosInt()
             self.pointsPossible = newPoints
         except ValueError:
             self.printBadInput(newPoints)
             self.editPPossible()
+        except RecursionError: #user cancels or recursion depth exceeded
+            print("canceled!") #return to calling scope
+    """
+
+    def setup(self) -> None:
+        try:
+            choice:str = None
+
+        except ValueError:
+            self.printBadInput(choice)
+            self.edit()
+        except RecursionError: #user cancels or recursion depth exceeded
+            print("canceled!") #return to calling scope
 
     def edit(self) -> None:
         try:
-            choice:str = None
-            self.presentInterface(
+            self.editName()
+            """ removed - only need to edit on Exam.retake
+            self.presentInterface( #Catches ValueErrors
                 "Would you like to edit the\n{name}, points {pos}sible,"
             + "or points {ear}ned?",
                 ["name", "pos", "ear"],
@@ -83,25 +109,23 @@ class Grade(Util):
                 self.editPPossible,
                 self.editPEarned]
             )
-        except ValueError:
-            self.printBadInput(choice)
-            self.edit()
+            """
         except RecursionError: #user cancels or recursion depth exceeded
             print("canceled!") #return to calling scope
 
     #should give an option for +/- system?
-    def getLetter(self) -> str:
+    def getLetter(self, letters:Tuple[str]=['F','D','C','B','A']) -> str:
         percentage = self.getPercentage()
-        if 0 <= percentage < 60:
-            return 'F'
-        elif 60 <= percentage < 70:
-            return 'D'
-        elif 70 <= percentage < 80:
-            return 'C'
-        elif 80 <= percentage < 90:
-            return 'B'
-        elif 90 <= percentage < 100:
-            return 'A'
+        if percentage < 60.0:
+            return letters[0]
+        elif 60 <= percentage < 70.0:
+            return letters[1]
+        elif 70 <= percentage < 80.0:
+            return letters[2]
+        elif 80 <= percentage < 90.0:
+            return letters[3]
+        elif 90 <= percentage <= 100.0:
+            return letters[4]
 
     def getPercentage(self) -> float:
         if self.pointsPossible == 0:
@@ -114,13 +138,16 @@ class Grade(Util):
         if percentageNeeded < 0: percentageNeeded = 0.0
         elif percentageNeeded > 100: percentageNeeded = 100.0
         return self.getPercentage() >= percentageNeeded
+
+#~~~~~~~~~~~~~~~~~~~END CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
         
 class Exam(Grade): #TODO
     def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
                 pointsEarned:int=0, questions:Dict[str,str]={}):
         self.questions:Dict[str,str] = questions
 
-#~~~~~~~~~~~~~~~~~~~END CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~END CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Asgmt(Grade): #TODO
@@ -133,12 +160,10 @@ class Asgmt(Grade): #TODO
                                    Grade("discussion post 2", pointsPossible = 5),
                                    Grade("progress submission 1", pointsPossible = 10),
                                    Grade("progress submission 2", pointsPossible = 10),
-                                   Grade("final submission and writeups", pointsPossible = 100)]
-        super().__init__(
-            name,
-            sum([g.pointsPossible for g in self.stages]),
-            pointsEarned
-        )
+                                   Grade("final submission and writeups",
+                                         pointsPossible = 100)]
+        super().__init__(name, sum([g.pointsPossible for g in self.stages]),
+                         pointsEarned)
 
     def __str__(self):
         ret = super().__str__() + "\nStages:\n"
@@ -150,7 +175,24 @@ class Asgmt(Grade): #TODO
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Demo(Grade): #TODO
-    def __init__(self):
-        pass
+    
+    def getLetter(self) -> str:
+        return super().getLetter(['U', "IP", "PW", 'P', 'E'])
+
+    def needsRetake(self) -> bool:
+        return self.getLetter() == "IP"
+
+    def retake(self) -> None:
+        try:
+            newPoints:int = None
+            print("Enter the new # of points earned out of",
+                  str(self.pointsPossible), "or !q to cancel:")
+            newPoints:str = self.getPosInt() #may throw RE or VE
+            self.pointsEarned = newPoints
+        except ValueError:
+            self.printBadInput(newPoints)
+            self.retake()
+        except RecursionError: #user cancels or recursion depth exceeded
+            print("canceled!") #return to calling scope
 
 #~~~~~~~~~~~~~~~~~~~END CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

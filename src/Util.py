@@ -1,4 +1,4 @@
-from typing import List, Dict, Callable
+from typing import List, Tuple, Dict, Callable
 
 """ CLASS UTIL
 contains name:str attribute w/ edit function,
@@ -23,7 +23,8 @@ class Util():
         if len(newName) > 0:
             self._name = str(newName)
 
-    #must be called from leaf-class's edit() function!
+    #handles any RecursionError or ValueError
+    #(must be called from leaf-class's edit() function!)
     def editName(self):
         print("Enter a new name" 
             + "(recommended maximum of 39 characters for display integrity)",
@@ -37,11 +38,14 @@ class Util():
         except RecursionError: #user cancels or recursion depth exceeded
             print("canceled!") #return to calling scope
 
-    #float('inf') produces a number larger than all others
+    #may throw RecursionError or ValueError
+    #(float('inf') produces a number larger than all others)
     def getPosInt(self, min:int=0, max:int=float('inf')) -> int:
-        ret = int(input(self.cursor))                #!may raise VE
+        ret = input(self.cursor)                #!may raise VE
         if ret == "!q":
             raise RecursionError                #is this appropriate?
+        else:
+            ret = int(ret)
         if ret < min or ret > max:
             raise ValueError                        #!may raise VE
         return ret #TODO test
@@ -71,14 +75,16 @@ class Util():
             based on the strings in the options list.
                 subroutines must take no args (for now? TODO)
         """ 
+    #May raise a RE that must be handled in client code!
+    #Handles own ValueErrs
     def presentInterface(self, prompt:str, options:List[str], routines:List[Callable]):
         #TODO test
         print(prompt, self.cursor, sep='\n')
         for opt in options:
             print(opt)
         try:
-            choice = self.getStr();
-            for opt in options:
+            choice = self.getStr() #! May raise RecursionError if user cancels
+            for opt in options:    #  Catch in client code
                 if opt == choice:
                     routines[options.index(opt)]()  #call subroutine
                     break
