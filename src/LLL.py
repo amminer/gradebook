@@ -38,9 +38,9 @@ class LLL():
         self.head:Node = None
     
     def __str__(self, ret:str = ""):
-        return self.strRecursive(self.head)
+        return self._strRecursive(self.head)
 
-    def strRecursive(self, head:Node, ret:str = ""):
+    def _strRecursive(self, head:Node, ret:str = ""):
         if not self.head: #head is not None; None is falsy
             return ret
         else:

@@ -1,7 +1,7 @@
 from Grade import * #Grade, Util.*
 
 """ CLASS GRADEBOOK
-#TODO
+#TODO will contain students in a bst in asgmt 5
 """
 
 class Gradebook(Util):

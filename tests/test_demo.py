@@ -31,9 +31,7 @@ def t_retake() -> None:
     #TODO monkeypatch?
     for g in gs:
         g.retake()
-        print("New score is", g.pointsEarned)
-        if not g.passes():
-            print("Better luck next time!")
+        print("New score:", g, sep='\n')
         choice:str = input("\nagain? (y to continue, anything else to quit)\n")
         if not choice == 'y':
             break

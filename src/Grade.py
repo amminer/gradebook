@@ -1,3 +1,4 @@
+from audioop import getsample
 from Util import * #Util, List
 
 """ CLASS GRADE
@@ -145,11 +146,15 @@ class Grade(Util):
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+# I had a really hard time thinking of a "job" for this class
+#so it keeps a dict of missed questions and allows client code to "practice"
+#against predetermined correct answers, maybe a bit of an overreach for
+#a grade object but here it is
         
 class Exam(Grade): #TODO
     def __init__(self, name:str="NOT SET",
                  pointsPossible:int=float('inf'), pointsEarned:int=0,
-                 questions:Dict[str,str]={}, extraCredit=False):
+                 questions:Dict[str,str]=dict(), extraCredit=False):
         self.questions:Dict[str,str] = questions
         self.extraCredit = extraCredit
         super().__init__(name, pointsPossible=pointsPossible,
@@ -161,15 +166,56 @@ class Exam(Grade): #TODO
             ret += 5.0
         return ret
 
-    #TODO def __str__
+    def __str__(self) -> str:
+        ret:str = ""
+        if self.questions:
+            ret += "\nMissed questions:\n"
+        for q in self.questions:
+            ret += q.key + '\n'
+        return super().__str__() + ret
+        
+    def addMissedQuestion(self):
+        print("Enter the new question:")
+        try:
+            newQuestion = self.getStr(1)
+            print("Enter the correct answer:")
+            newAnswer = self.getStr(1)
+            self.questions[newQuestion] = newAnswer
+        except ValueError:
+            self.printBadInput()
+            self.addMissedQuestion()
+        except RecursionError:
+            print("canceled!") #return to calling scope
 
-    #TODO def addMissedQuestion
+    def removeMissedQuestion(self):
+        toRem:str = ""
+        print("Enter the name of the question to remove:")
+        try:
+            toRem = self.getStr(1)
+            del self.questions[toRem]
+        except (ValueError, KeyError):  #I deeply dislike this syntax
+            self.printBadInput(toRem)
+            self.removeMissedQuestion()
+        except RecursionError:          #Why not `except x or y`?
+            print("canceled!") #return to calling scope
 
-    #TODO def removeMissedQuestion
-
-    #TODO def editMissedQuestions
-
-    #TODO def practice
+    def practice(self):
+        answer:str = ""
+        if not self.questions:
+            print("Nothing to practice!")
+        for q in self.questions.items():
+            print(q[0])
+            print("Enter your answer:")
+            try:
+                answer = self.getStr(1)
+                print ("Correct answer:", q[1], sep='\n')
+            except RecursionError:
+                print("Skipping for now...")
+                continue
+            except ValueError:
+                self.printBadInput(answer)
+                print("Skipping for now...")
+                continue
 
 #~~~~~~~~~~~~~~~~~~~END CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -210,7 +256,7 @@ class Asgmt(Grade): #TODO
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-class Demo(Grade): #TODO
+class Demo(Grade):
     
     def __init__(self, name:str="NOT SET", pointsPossible:int=20,
                 pointsEarned:int=0):

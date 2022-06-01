@@ -60,11 +60,11 @@ class Util():
 
     def printBadInput(self, badInput:str="") -> None:
         output = ""
-        output += "I can't believe you've done this..."
-        if badInput != None:
-            output += "(\"{}\" is bad input)".format(badInput)
+        output += "Invalid input!"
+        if badInput != None and badInput != "":
+            output += f" (\"{badInput}\" is bad input)"
         print(output)
-        return #TODO
+        return
 
         """ PRESENTINTERFACE
                 Takes a string prompt, a list of strings `options`, and
