@@ -140,6 +140,10 @@ class Grade(Util):
         return self.getPercentage() >= percentageNeeded
 
 #~~~~~~~~~~~~~~~~~~~END CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
         
 class Exam(Grade): #TODO
@@ -158,6 +162,10 @@ class Exam(Grade): #TODO
 #TODO def practice
 
 #~~~~~~~~~~~~~~~~~~~END CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Asgmt(Grade): #TODO
@@ -183,7 +191,13 @@ class Asgmt(Grade): #TODO
 
 #TODO def setup
 
+#TODO more jobs?...
+
 #~~~~~~~~~~~~~~~~~~~END CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Demo(Grade): #TODO
