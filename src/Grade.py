@@ -12,11 +12,11 @@ subroutines for both attrs (Likely to be overridden in leaf classes? todo).
 """
 
 class Grade(Util):
-    #any way to make this const per class/instance?
-    countsTowardFinal = True #todo use in gradebook, set False in Demo
     
     def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
                 pointsEarned:int=0):
+        #any way to make this const per class/instance?
+        countsTowardFinal = True #todo use in gradebook for asgmt5
         super().__init__(name)
         self._pointsPossible = pointsPossible
         self._pointsEarned = pointsEarned
@@ -134,7 +134,7 @@ class Grade(Util):
             percentage = self.pointsEarned / self.pointsPossible * 100
         return percentage
 
-    def passes(self, percentageNeeded:float=60.0) -> bool:
+    def passes(self, percentageNeeded:float=70.0) -> bool:
         if percentageNeeded < 0: percentageNeeded = 0.0
         elif percentageNeeded > 100: percentageNeeded = 100.0
         return self.getPercentage() >= percentageNeeded
@@ -146,6 +146,16 @@ class Exam(Grade): #TODO
     def __init__(self, name:str="NOT SET", pointsPossible:int=float('inf'),
                 pointsEarned:int=0, questions:Dict[str,str]={}):
         self.questions:Dict[str,str] = questions
+
+#TODO def __str__
+
+#TODO def addMissedQuestion
+
+#TODO def removeMissedQuestion
+
+#TODO def editMissedQuestions
+
+#TODO def practice
 
 #~~~~~~~~~~~~~~~~~~~END CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -171,11 +181,18 @@ class Asgmt(Grade): #TODO
             ret += str(grade) + '\n'
         return ret
 
+#TODO def setup
+
 #~~~~~~~~~~~~~~~~~~~END CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Demo(Grade): #TODO
     
+    def __init__(self, name:str="NOT SET", pointsPossible:int=20,
+                pointsEarned:int=0):
+        self.countsTowardFinal = False #todo use in gradebook for asgmt5
+        super().__init__(name, pointsPossible, pointsEarned)
+
     def getLetter(self) -> str:
         return super().getLetter(['U', "IP", "PW", 'P', 'E'])
 

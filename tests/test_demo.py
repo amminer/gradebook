@@ -1,7 +1,7 @@
 import __init__
 from random import randint
 from Grade import Demo
-gs = [Demo(pointsPossible=i, pointsEarned = randint(0,i)) for i in range(1,1000)]
+gs = [Demo(pointsEarned = randint(0,20)) for i in range(1,1000)]
 
 def test_getLetter() -> None:
     for g in gs:
