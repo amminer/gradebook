@@ -16,26 +16,36 @@ class Student(Util):
         super().__init__(name)
         self.grades = LLL()
 
+    def addFromStdin(self):
+        pass #TODO
+
     #may raise VE on type mismatch (must be Grade)
     def addGrade(self, newGrade:Grade):
-        if type(newGrade) == Grade:
-            LLL.pushBack(newGrade)
+        if isinstance(newGrade, Grade):
+            self.grades.pushBack(newGrade)
         else:
             raise ValueError(f"Type mismatch ({newGrade} is not a Grade)")
 
+    def removeFromStdin(self):
+        pass #TODO
+
+    # accepts strings or Grades
     def removeGrade(self, keyName:str):
-        pass
+        if type(keyName) == str or isinstance(keyName, Grade):
+            self.grades.remove(keyName)
+        else:
+            raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)")
 
     def retakeDemo(self):
-        pass
+        pass #TODO
 
     """All grades together so far - weight is built into points"""
     def cumulativeGrade(self):
-        pass
+        pass #TODO
 
     """Generate a report with basic info about what a student's
     best and worst areas are in terms of grade types, maybe asgmt subgrades"""
     def report(self):
-        pass
+        pass #TODO
 
 #~~~~~~~~~~~~~~~~~~~END CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#

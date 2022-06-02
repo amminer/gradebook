@@ -91,18 +91,20 @@ class LLL():
         else:
             self._remove(thatPrev, thatOne)
     def _findPairRecursive(self, thisNode:Node, key):
-        if not thisNode.next:
-            if thisNode.data == key:
-                return None, thisNode 
+        #case head matches
+        if not thisNode:
             return False, False
-        elif thisNode.next.data == key:
+        elif thisNode == self.head and thisNode.data == key:
+            return None, thisNode
+        #case match after head
+        elif thisNode.next and thisNode.next.data == key:
             return thisNode, thisNode.next
         else:
             return self._findPairRecursive(thisNode.next, key)
     #thatPrev may == None
     def _remove(self, thatPrev:Node, thatNode:Node):
         if not thatPrev:            #case head
-            self.head = thatNode
+            self.head = thatNode.next
         elif not thatNode.next:     #case tail
             thatPrev.next = None
         else:                       #case sandwiched

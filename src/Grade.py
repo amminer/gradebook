@@ -24,10 +24,9 @@ class Grade(Util):
 
     #for string keynames or Grades
     def __eq__(self, other):
-        oType = type(other)
-        if oType == str:
+        if type(other) == str:
             return self.name == other
-        elif oType == Grade:
+        elif isinstance(other, Grade):
             return self.name == other.name 
         else:
             return False
