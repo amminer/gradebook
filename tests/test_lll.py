@@ -42,6 +42,12 @@ def test_at():
     
 def test_remove():
     l = LLL()
+    try:
+        l.remove("a")
+        assert False #should raise IE
+    except IndexError as ie:
+        print(ie)
+        assert True #good
     l.pushBack("a")
     l.pushBack("b")
     l.pushBack("c")
@@ -49,11 +55,19 @@ def test_remove():
     assert l.at(0) == "a"
     assert l.at(1) == "c"
     assert len(l) == 2
+    try:
+        l.remove("x")
+        assert False #should raise IE
+    except IndexError as ie:
+        print(ie)
+        assert True #good
     #TODO automate
 
 def lookup(self):
     pass #TODO
     #TODO automate
 
+"""debug
 if __name__ == "__main__":
     test_remove()
+"""
