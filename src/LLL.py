@@ -85,11 +85,12 @@ class LLL():
             self._pushBackRecursive(thisNode.next, newData)
 
     def remove(self, key):
-        thatPrev, thatOne = self._findRecursive(self.head, key)
+        thatPrev, thatOne = self._findPairRecursive(self.head, key)
         if type(thatOne) == bool and not thatOne:
-            raise IndexError(f"{key} not found in list")
-        self._remove(thatPrev, thatOne)
-    def _findRecursive(self, thisNode:Node, key):
+            pass
+        else:
+            self._remove(thatPrev, thatOne)
+    def _findPairRecursive(self, thisNode:Node, key):
         if not thisNode.next:
             if thisNode.data == key:
                 return None, thisNode 
@@ -97,7 +98,7 @@ class LLL():
         elif thisNode.next.data == key:
             return thisNode, thisNode.next
         else:
-            return self._findRecursive(thisNode.next, key)
+            return self._findPairRecursive(thisNode.next, key)
     #thatPrev may == None
     def _remove(self, thatPrev:Node, thatNode:Node):
         if not thatPrev:            #case head
@@ -108,4 +109,13 @@ class LLL():
             thatPrev.next = thatNode.next
         del thatNode #is this needed?
 
-    #TODO def lookup(self):
+    def lookup(self, key): #returns node data type or None
+        ret:Node = self._findRecursive(self.head, key)
+        return ret
+    def _findRecursive(self, thisNode:Node, key):
+        if not thisNode:
+            return None
+        elif thisNode.data == key:
+            return thisNode.data
+        else:
+            return self._findRecursive(thisNode.next, key)

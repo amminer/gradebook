@@ -10,7 +10,7 @@ GIT NOTES:
     edit and commit as per the usual, just don't forget to commit! Have fun!
 [...] Learn vscode symbols/documentation habit
 [X] Core hierarchy
-[Y] Node/LLL
+[X] Node/LLL
 [ ] Student
 [ ] parameterized pytests?
 [ ] pytest fixtures?
