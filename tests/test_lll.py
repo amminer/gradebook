@@ -53,6 +53,9 @@ def test_remove():
     assert l.at(0) == "a"
     assert l.at(1) == "c"
     assert len(l) == 2
+    l.remove("a")
+    assert len(l) == 1
+    assert l.at(0) == "c"
     #TODO automate
 
 def test_lookup():
