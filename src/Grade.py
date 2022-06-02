@@ -22,6 +22,16 @@ class Grade(Util):
         self._pointsPossible = pointsPossible
         self._pointsEarned = pointsEarned #asgmt subgrades need direct access
 
+    #for string keynames or Grades
+    def __eq__(self, other):
+        oType = type(other)
+        if oType == str:
+            return self.name == other
+        elif oType == Grade:
+            return self.name == other.name 
+        else:
+            return False
+
     def __str__(self):
         ret = self.name + ':'
         nameLen = len(self.name) + 1 #1 for colon
@@ -176,12 +186,6 @@ class Exam(Grade):
         super().__init__(name, pointsPossible=pointsPossible,
                          pointsEarned=pointsEarned)
 
-    def getPercentage(self) -> float:
-        ret:float = super().getPercentage()
-        if self.extraCredit:
-            ret += 5.0
-        return ret
-
     def __str__(self) -> str:
         ret:str = ""
         if self.questions:
@@ -190,6 +194,12 @@ class Exam(Grade):
             ret += q.key + '\n'
         return super().__str__() + ret
         
+    def getPercentage(self) -> float:
+        ret:float = super().getPercentage()
+        if self.extraCredit:
+            ret += 5.0
+        return ret
+
     def addMissedQuestion(self):
         print("Enter the new question:")
         try:

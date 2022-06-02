@@ -1,5 +1,7 @@
+from multiprocessing.sharedctypes import Value
 from Util import *
 from Grade import *
+from LLL import LLL
 import numpy as np
 
 """ CLASS STUDENT
@@ -12,12 +14,16 @@ class Student(Util):
 
     def __init__(self, name:str = "NOT SET"):
         super().__init__(name)
-        self.grades:np.array[Grade] = []
+        self.grades = LLL()
 
-    def addGrade(self):
-        pass
+    #may raise VE on type mismatch (must be Grade)
+    def addGrade(self, newGrade:Grade):
+        if type(newGrade) == Grade:
+            LLL.pushBack(newGrade)
+        else:
+            raise ValueError(f"Type mismatch ({newGrade} is not a Grade)")
 
-    def removeGrade(self):
+    def removeGrade(self, keyName:str):
         pass
 
     def retakeDemo(self):

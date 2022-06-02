@@ -52,6 +52,14 @@ def test_passes() -> None:
             else:
                 assert not g.passes(i)
 
+def test_eq():
+    g1 = Grade("abc")
+    g2 = Grade("xyz")
+    g3 = Grade("abc")
+    assert g1 == g3 and g1 == "abc"
+    assert g3 != g2 and g2 != "abc"
+    assert g1 != 123
+
 def t_setup():
     g = Grade()
     if g.setup():
