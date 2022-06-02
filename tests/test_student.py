@@ -2,6 +2,10 @@ import __init__
 from Student import Student
 from Grade import *
 
+def test_str():
+    s = Student("Hieronymus")
+    assert str(s) == "Student Hieronymus:\nEmpty"
+
 def test_addGrade():
     s = Student("Hieronymus")
     g = Exam("FINAL!", pointsPossible = 100, pointsEarned = 90)
@@ -13,11 +17,35 @@ def test_removeGrade():
     s = Student("Hieronymus")
     a = Asgmt("Assignment 4", pointsEarned = 10) #oof
     b = Exam("Midterm 1", pointsPossible = 200, pointsEarned = 0) #busy partying
+    c = Demo("Midterm Demo", pointsEarned = 15)
+    s.removeGrade("test") #should fail silently
     s.addGrade(a)
     s.addGrade(b)
+    s.addGrade(c)
     s.removeGrade("Assignment 4")
     assert s.grades.at(0) == b
+    assert len(s.grades) == 2
+    s.removeGrade(b)
+    assert s.grades.at(0) == c
     assert len(s.grades) == 1
+    s.addGrade(b)
+    s.removeGrade(b)
+    assert s.grades.at(0) == c
+    assert len(s.grades) == 1
+    s.removeGrade(c)
+    assert len(s.grades) == 0
+
+def t_retakeDemo():
+    s = Student("Hieronymus")
+    c = Demo("Midterm Demo", pointsEarned = 12)
+    d = Demo("Final Demo", pointsEarned = 18)
+    f = Exam("FINAL EXAM!")
+    s.addGrade(c)
+    s.addGrade(f)
+    s.addGrade(d)
+    s.retakeDemoFromStdin() #try a bad name
+    s.retakeDemoFromStdin() #try the right name
+    print(s)
 
 if __name__ == "__main__":
-    test_removeGrade()
+    t_retakeDemo()

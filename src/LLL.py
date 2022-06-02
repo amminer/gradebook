@@ -40,15 +40,14 @@ class LLL():
     
     def __str__(self):
         if not self.head:
-            return "List is empty"
+            return "Empty"
         return self._strRecursive(self.head)
     def _strRecursive(self, head:Node, ret:str = "") -> str:
-        if not self.head: #head is not None; None is falsy
+        if not head: #head is not None; None is falsy
             return ret
         else:
-            return '\n'.join(ret,
-                             str(self.head.data),
-                             self.strRecursive(head.next, ret))
+            return ret + '\n' + str(head.data) + '\n' \
+                 + self._strRecursive(head.next, ret)
 
     def __len__(self):
         return self._countNodesRecursive(self.head)

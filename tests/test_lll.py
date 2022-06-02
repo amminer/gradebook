@@ -6,7 +6,7 @@ def test_init_str():
     l = LLL()
     assert not l #empty LLL is falsy
     assert l.head == None
-    assert l.__str__() == "List is empty"
+    assert l.__str__() == "Empty"
     #TODO automate
 
 #also tests __len__
