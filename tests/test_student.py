@@ -55,6 +55,13 @@ def t_addFromCin():
     s.addFromStdin()
     print(s) #TODO automate
 
+def t_removeFromCin():
+    s = Student("Hieronymus")
+    a = Asgmt("a", pointsEarned = 10) #oof
+    s.addGrade(a)
+    s.removeFromStdin()
+    print(s) #TODO automate
+
 def t_retakeDemo():
     s = Student("Hieronymus")
     c = Demo("Midterm Demo", pointsEarned = 12)
@@ -68,4 +75,4 @@ def t_retakeDemo():
     print(s)
 
 if __name__ == "__main__":
-    t_addFromCin()
+    t_removeFromCin()

@@ -89,8 +89,9 @@ class LLL():
 
     def remove(self, key):
         thatPrev, thatOne = self._findPairRecursive(self.head, key)
-        if type(thatOne) == bool and not thatOne:
-            pass
+        if type(thatOne) == bool and type(thatPrev) == bool \
+           and not thatOne and not thatPrev:
+            raise ValueError(f"{key} was not found")
         else:
             self._remove(thatPrev, thatOne)
     def _findPairRecursive(self, thisNode:Node, key):

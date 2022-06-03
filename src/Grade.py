@@ -41,9 +41,8 @@ class Grade(Util):
             if numTabs == 0:
                 break
         ret += '\t' * numTabs
-        ret += str(self.pointsEarned)   + '/' \
-             + str(self.pointsPossible) + " points (" \
-             + self.getLetter() + ')'
+        ret += f"{self.pointsEarned}/{self.pointsPossible} points (" \
+             + f"{self.getPercentage():.2f}%, {self.getLetter()})"
         return ret
     
     @property
@@ -108,11 +107,11 @@ class Grade(Util):
                 choice = self.getStr(1)
                 self.name = choice
             if self.pointsPossible == float('inf'):
-                print("Enter the number of possible points:")
+                print(f"Enter the number of possible points (must be > {self.pointsEarned}):")
                 choice = self.getPosInt()
                 self.pointsPossible = choice
             if self.pointsEarned == -1:
-                print("Enter the number of points earned:")
+                print(f"Enter the number of points earned out of {self.pointsPossible}:")
                 choice = self.getPosInt()
                 self.pointsEarned = choice
         except RecursionError as re:
@@ -180,7 +179,7 @@ class Exam(Grade):
     weight = 4
 
     def __init__(self, name:str="NOT SET",
-                 pointsPossible:int=float('inf'), pointsEarned:int=0,
+                 pointsPossible:int=float('inf'), pointsEarned:int=-1,
                  questions:Dict[str,str]=dict(), extraCredit=False):
         self.questions:Dict[str,str] = questions
         self.extraCredit = extraCredit
@@ -255,7 +254,7 @@ class Exam(Grade):
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Asgmt(Grade):
-    #points possible always same for asgmts
+    #points possible always same for asgmts; pointsE determined in setup
     def __init__(self, name:str="NOT SET", pointsEarned:int=0):
         #     0          1           2           3           4          5
         #  discuss1, draftheaders, discuss2,  progsub1,  progsub2, final/writeup

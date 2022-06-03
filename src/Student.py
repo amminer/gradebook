@@ -1,3 +1,4 @@
+from multiprocessing.sharedctypes import Value
 from Util import *
 from Grade import *
 from LLL import LLL
@@ -20,7 +21,7 @@ class Student(Util):
 
     def addFromStdin(self):
         try:
-            print("Which type of grade is this?",
+            print("Which is the type of the new grade?",
                   "{Exam}", "Proficicency {Demo}", "or Programming {Asgmt}?",
                   "({!q} to cancel)", sep='\n')
             type = self.getStr(4).lower()
@@ -52,7 +53,18 @@ class Student(Util):
             raise ValueError(f"Type mismatch ({newGrade} is not a Grade)")
 
     def removeFromStdin(self):
-        pass #TODO
+        try:
+            print("Enter the name of the grade you'd like to remove",
+            "or {!q} to cancel:", sep='\n')
+            name = self.getStr(1)
+            self.grades.remove(name) #throws VE on not found
+
+        except RecursionError as re:
+            print(re)
+
+        except ValueError as ve:
+            print(ve)
+            self.removeFromStdin()
 
     # accepts strings or Grades
     def removeGrade(self, keyName:str):
@@ -73,7 +85,8 @@ class Student(Util):
             self.retakeDemoFromStdin()
 
     """ 
-    TODO define some methods for interacting with exam.questions from stdin
+    todo define some methods for interacting with exam.questions from stdin
+    goning to have to wait til asgmt5
     """
 
     def retakeDemo(self, thatDemo:Demo):
@@ -92,22 +105,55 @@ class Student(Util):
         weightedPossible = sum([g.pointsPossible*g.weight for g in self.grades])
         weightedEarned = sum([g.pointsEarned * g.weight for g in self.grades])
         """
+        if len(self.grades) == 0:
+            return 0.0
         weightedPossible = \
-            sum([self.grades.at(i).pointsPossible*self.grades.at(i).weight
-                 for i in range(len(self.grades))])
+            np.array([self.grades.at(i).pointsPossible*self.grades.at(i).weight
+                 for i in range(len(self.grades))]).sum()
         weightedEarned = \
-            sum([self.grades.at(i).pointsEarned*self.grades.at(i).weight
-                 for i in range(len(self.grades))])
-        print(str(weightedEarned), "out of", str(weightedPossible))
+            np.array([self.grades.at(i).pointsEarned*self.grades.at(i).weight
+                 for i in range(len(self.grades))]).sum()
         return weightedEarned / weightedPossible * 100
 
     """Generate a report with basic info about what a student's
     best and worst areas are in terms of grade types, maybe asgmt subgrades
     def report(self):
-        pass #TODO
+        pass #todo
     """
 
 #~~~~~~~~~~~~~~~~~~~END CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+def mainloop(student:Student, cont = True):
+    print('\n' + str(s))
+    print("Would you like to...",
+          "   {Add} a new grade,",
+          "   {Rem}ove a grade,",
+          "   {Retake} a proficiency demo,",
+          "or {Calc}ulate your total/cumulative grade?",
+          "  ({!q} to quit)", sep='\n')
+    try:
+        choice = s.getStr().lower()
+    except ValueError as ve:
+        print(ve)
+        return mainloop(s)
+    except RecursionError as re:
+        return
+    if choice == "add":
+        s.addFromStdin()
+    elif choice == "rem":
+        s.removeFromStdin()
+    elif choice == "retake":
+        s.retakeDemoFromStdin()
+    elif choice == "calc":
+        print(f"{s.cumulativeGrade():.2f}%")
+    else:
+        print("Invalid selection!")
+    return mainloop(s)
+
 if __name__ == "__main__":
-    print ("TODO implement a main menu? Want to wait until we have a gradebook...")
+    print("Welcome to assignment 4.")
+    s = Student()
+    s.editName()
+    if s.name != "NOT SET":
+        mainloop(s)
+    print("Thanks for checking it out!")
