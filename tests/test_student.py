@@ -18,7 +18,11 @@ def test_removeGrade():
     a = Asgmt("Assignment 4", pointsEarned = 10) #oof
     b = Exam("Midterm 1", pointsPossible = 200, pointsEarned = 0) #busy partying
     c = Demo("Midterm Demo", pointsEarned = 15)
-    s.removeGrade("test") #should fail silently
+    try:
+        s.removeGrade("test")
+        assert False #should have failed on bad name input
+    except ValueError:
+        assert True #good
     s.addGrade(a)
     s.addGrade(b)
     s.addGrade(c)

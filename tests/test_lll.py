@@ -49,7 +49,11 @@ def test_remove():
     assert l.at(0) == "a"
     assert l.at(1) == "c"
     assert len(l) == 2
-    l.remove("x") #fails silently
+    try:
+        l.remove("x") #throws VE
+        assert False #should have thrown
+    except ValueError:
+        assert True #good
     assert l.at(0) == "a"
     assert l.at(1) == "c"
     assert len(l) == 2
