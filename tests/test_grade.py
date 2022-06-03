@@ -1,6 +1,6 @@
 import __init__
 from random import randint
-from Grade import Grade
+from Grade import Grade, Asgmt, Demo, Exam
 
 def test_getPercentage() -> None:
     gs = [Grade(pointsPossible=i, pointsEarned = randint(0,i)) for i in range(1,1000)]
@@ -60,6 +60,14 @@ def test_eq():
     assert g3 != g2 and g2 != "abc"
     assert g1 != 123
 
+def test_weight():
+    e = Exam(pointsEarned=10, pointsPossible=20)
+    d = Demo(pointsEarned=10, pointsPossible=20)
+    a = Asgmt(pointsEarned=10)
+    print(e.weight)
+    weightedPoints = [((g.pointsEarned*g.weight),(g.pointsPossible*g.weight)) for g in [e,d,a]]
+    assert weightedPoints == [(40, 80), (0, 0), (10, 135)]
+
 def t_setup():
     g = Grade()
     if g.setup():
@@ -86,4 +94,4 @@ def test_pointsEarned() -> None:
 """
 
 if __name__ == "__main__":
-    t_setup()
+    test_weight()

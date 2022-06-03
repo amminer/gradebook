@@ -32,7 +32,11 @@ class Node():
 
 #~~~~~~~~~~~~~~~~~~~END CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
+
+
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS LLL~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#I want to make this iterable but don't really have time to learn that :(
+#Would be nice to be able to use it in list comprehensions
 
 class LLL():
     def __init__(self):

@@ -35,6 +35,26 @@ def test_removeGrade():
     s.removeGrade(c)
     assert len(s.grades) == 0
 
+def test_cumulativeGrade():
+    s = Student("Hieronymus")
+    a = Asgmt("Assignment 3", pointsEarned = 17)
+    b = Exam("Midterm 2", pointsPossible=200,pointsEarned=187, extraCredit=True)
+    c = Demo("Final Demo", pointsEarned = 14)
+    aw = a.weight
+    bw = b.weight
+    cw = c.weight
+    s.addGrade(a)
+    s.addGrade(b)
+    s.addGrade(c)
+    #points times weights, all together
+    assert s.cumulativeGrade() == (17*aw + 187*bw + 14*cw) \
+                                / (135*aw + 200*bw + 20*cw)*100
+
+def t_addFromCin():
+    s = Student("Hieronymus")
+    s.addFromStdin()
+    print(s) #TODO automate
+
 def t_retakeDemo():
     s = Student("Hieronymus")
     c = Demo("Midterm Demo", pointsEarned = 12)
@@ -48,4 +68,4 @@ def t_retakeDemo():
     print(s)
 
 if __name__ == "__main__":
-    t_retakeDemo()
+    t_addFromCin()

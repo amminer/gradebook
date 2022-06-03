@@ -11,7 +11,7 @@ GIT NOTES:
 [...] Learn vscode symbols/documentation habit
 [X] Core hierarchy
 [X] Node/LLL
-[ ] Student
+[Y] Student
 [ ] parameterized pytests?
 [ ] pytest fixtures?
 

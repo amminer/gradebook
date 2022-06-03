@@ -13,11 +13,11 @@ subroutines for both attrs (Likely to be overridden in leaf classes? todo).
 """
 
 class Grade(Util):
+    weight = 1
     
     def __init__(self, name:str="NOT SET", pointsPossible:float=float('inf'),
                 pointsEarned:int=-1):
         #any way to make this const per class/instance?
-        countsTowardFinal = True #todo use in gradebook for asgmt5
         super().__init__(name)
         self._pointsPossible = pointsPossible
         self._pointsEarned = pointsEarned #asgmt subgrades need direct access
@@ -177,6 +177,8 @@ class Grade(Util):
 #a grade object but here it is
         
 class Exam(Grade):
+    weight = 4
+
     def __init__(self, name:str="NOT SET",
                  pointsPossible:int=float('inf'), pointsEarned:int=0,
                  questions:Dict[str,str]=dict(), extraCredit=False):
@@ -310,10 +312,10 @@ class Asgmt(Grade):
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Demo(Grade):
+    weight = 0
     
     def __init__(self, name:str="NOT SET", pointsPossible:int=20,
-                pointsEarned:int=0):
-        self.countsTowardFinal = False #todo use in gradebook for asgmt5
+                pointsEarned:int=-1):
         super().__init__(name, pointsPossible, pointsEarned)
 
     def getLetter(self) -> str:
