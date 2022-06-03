@@ -11,9 +11,10 @@ GIT NOTES:
 [...] Learn vscode symbols/documentation habit
 [X] Core hierarchy
 [X] Node/LLL
-[Y] Student
+[X] Student
 [ ] parameterized pytests?
 [ ] pytest fixtures?
 
 ASGMT5:
 [ ] BST
+[ ] Gradebook
