@@ -74,7 +74,7 @@ class Student(Util):
             raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)")
 
     def retakeDemoFromStdin(self):
-        print("Enter the name of the demo to retake:")
+        print("Enter the name of the demo to retake, or {!q} to cancel:")
         try:
             choice = self.getStr(1)
             self.retakeDemo(choice)
@@ -84,10 +84,39 @@ class Student(Util):
             print(ve)
             self.retakeDemoFromStdin()
 
-    """ 
-    todo define some methods for interacting with exam.questions from stdin
-    goning to have to wait til asgmt5
-    """
+    def exam(self, thatExam:Exam or str):
+        thisExam = self.grades.lookup(thatExam)
+        if thisExam:
+            try:
+                print("Would you like to {add} a question, {rem}ove a question,",
+                    "or {practice}?\n{!q} to cancel")
+                choice = self.getStr().lower()
+                if choice == "add":
+                    thisExam.addMissedQuestion()
+                elif choice == "rem":
+                    thisExam.removeMissedQuestion()
+                elif choice == "practice":
+                    thisExam.practice()
+                else:
+                    raise ValueError(f"{choice} is not a valid selection")
+            except ValueError as ve:
+                print(ve)
+                self.exam(thatExam)
+            except RecursionError as re:
+                print(re)
+        else:
+            raise ValueError(f"Exam {thatExam} not found")
+
+    def examFromStdin(self):
+        try:
+            print("Enter the name of the exam, or {!q} to cancel:")
+            name = self.getStr()
+            self.exam(name)
+        except RecursionError as re:
+            print(re)
+        except ValueError as ve:
+            print(ve)
+            self.examFromStdin()
 
     def retakeDemo(self, thatDemo:Demo):
         thisDemo = self.grades.lookup(thatDemo)
@@ -129,6 +158,7 @@ def mainloop(student:Student, cont = True):
           "   {Add} a new grade,",
           "   {Rem}ove a grade,",
           "   {Retake} a proficiency demo,",
+          "   Look at missed questions from an {exam},"
           "or {Calc}ulate your total/cumulative grade?",
           "  ({!q} to quit)", sep='\n')
     try:
@@ -144,6 +174,8 @@ def mainloop(student:Student, cont = True):
         s.removeFromStdin()
     elif choice == "retake":
         s.retakeDemoFromStdin()
+    elif choice == "exam":
+        s.examFromStdin()
     elif choice == "calc":
         print(f"{s.cumulativeGrade():.2f}%")
     else:

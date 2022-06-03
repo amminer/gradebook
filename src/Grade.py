@@ -190,8 +190,8 @@ class Exam(Grade):
         ret:str = ""
         if self.questions:
             ret += "\nMissed questions:\n"
-        for q in self.questions:
-            ret += q.key + '\n'
+        for q in self.questions.keys():
+            ret += q + '\n'
         return super().__str__() + ret
         
     def getPercentage(self) -> float:
