@@ -1,3 +1,14 @@
+ASGMT5:
+[/] BST
+    [X] Node
+    [/] BST
+        [X] insert
+        [X] display
+        [ ] remove
+        [ ] lookup
+[ ] Gradebook
+    [ ] etc
+
 ASGMT4:
 GIT NOTES:
     *have to pay gitlab to host, should maybe set up rpi server
@@ -9,12 +20,5 @@ GIT NOTES:
         pulls the most recent version of main to the local repo
     edit and commit as per the usual, just don't forget to commit! Have fun!
 [...] Learn vscode symbols/documentation habit
-[X] Core hierarchy
-[X] Node/LLL
-[X] Student
 [ ] parameterized pytests?
 [ ] pytest fixtures?
-
-ASGMT5:
-[ ] BST
-[ ] Gradebook
