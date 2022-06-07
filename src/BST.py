@@ -44,6 +44,21 @@ class BST():
                 root.right = newNode
                 newNode.parent = root
 
+    def remove(self, key) -> bool: #returns whether success
+        if self.root:
+            toRemove = self._findNode(key)
+            if toRemove == None:
+                return False
+            return self.remove(self.root, key)
+        return False
+    #do not call with null root
+    def _findNode(self, key):
+        pass #TODO
+    def remove(self, root:Node, key):
+        ret = None
+        if root.data == key:
+            ret = roo
+
 class Node():
     def __init__(self, data=None, left=None, right=None, parent=None):
         self.data = data

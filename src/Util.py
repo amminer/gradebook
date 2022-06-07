@@ -79,7 +79,6 @@ class Util():
     #Handles own ValueErrs
     def presentInterface(self, prompt:str, options:List[str],
                          routines:List[Callable]):
-        #TODO test
         print(prompt, self.cursor, sep='\n')
         for opt in options:
             print(opt)
