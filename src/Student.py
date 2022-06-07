@@ -19,6 +19,14 @@ class Student(Util):
     def __str__(self):
         return f"Student {self.name}:\n{str(self.grades)}"
 
+    def __eq__(self, other) -> bool:
+        if isinstance(other, Student):
+            return self.name == other.name
+        elif isinstance(other, str):
+            return self.name == other
+        else:
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+
     def addFromStdin(self):
         try:
             print("Which is the type of the new grade?",
@@ -34,7 +42,7 @@ class Student(Util):
             else:
                 raise ValueError("Input must match exam, demo, asgmt, or !q")
             if newGrade.setup():
-                self.grades.pushBack(newGrade)
+                self._addGrade(newGrade)
             else:
                 print("Canceled addition")
 
@@ -46,7 +54,7 @@ class Student(Util):
             self.addFromStdin()
 
     #may raise VE on type mismatch (must be Grade)
-    def addGrade(self, newGrade:Grade):
+    def _addGrade(self, newGrade:Grade):
         if isinstance(newGrade, Grade):
             self.grades.pushBack(newGrade)
         else:
@@ -57,7 +65,7 @@ class Student(Util):
             print("Enter the name of the grade you'd like to remove",
             "or {!q} to cancel:", sep='\n')
             name = self.getStr(1)
-            self.grades.remove(name) #throws VE on not found
+            self._removeGrade(name) #throws VE on not found
 
         except RecursionError as re:
             print(re)
@@ -67,7 +75,7 @@ class Student(Util):
             self.removeFromStdin()
 
     # accepts strings or Grades
-    def removeGrade(self, keyName:str):
+    def _removeGrade(self, keyName:str):
         if type(keyName) == str or isinstance(keyName, Grade):
             self.grades.remove(keyName)
         else:

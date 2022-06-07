@@ -1,3 +1,4 @@
+from http.client import LENGTH_REQUIRED
 from Student import Student
 
 class Node():pass #declaration so BST can come first
@@ -6,6 +7,16 @@ class BST():
     def __init__(self, root=None):
         self.root = root
     
+    def __len__(self) -> int:
+        return self.lenRecursive(self.root)
+    def lenRecursive(self, root:Node) -> int:
+        if not root:
+            return 0
+        else:
+            return 1 \
+                 + self.lenRecursive(root.left) \
+                 + self.lenRecursive(root.right)
+
     @property
     def root(self):
         return self._root
@@ -44,20 +55,73 @@ class BST():
                 root.right = newNode
                 newNode.parent = root
 
+    #finds and removes a node with key data if there is one
     def remove(self, key) -> bool: #returns whether success
         if self.root:
-            toRemove = self._findNode(key)
+            toRemove = self._findNode(self.root, key)
             if toRemove == None:
                 return False
-            return self.remove(self.root, key)
+            self._remove(toRemove)
+            return True
         return False
-    #do not call with null root
-    def _findNode(self, key):
-        pass #TODO
-    def remove(self, root:Node, key):
-        ret = None
-        if root.data == key:
-            ret = roo
+    def _findNode(self, root:Node, key):
+        if not root:
+            return None
+        elif root.data == key:
+            return root
+        else:
+            ret = self._findNode(root.left, key)
+            if not ret:
+                ret = self._findNode(root.right, key)
+            return ret
+    #removes a node using a reference to it
+    #do not call with None
+    def _remove(self, root:Node) -> None:
+        if root.left and root.right: # case 2 children
+            #find the in-order successor
+            inOrderSuccessor = self._findSmallest(root.right)
+            #swap it with this node and recurse 
+            tempData = inOrderSuccessor.data
+            inOrderSuccessor.data = root.data
+            root.data = tempData
+            self._remove(inOrderSuccessor)
+        elif bool(root.left) ^ bool(root.right): #case 1 c
+            if root == self.root: #case root
+                if root.left:
+                    self.root = root.left
+                else:
+                    self.root = root.right
+            else: #case not root
+                if root.left:
+                    if root.parent.left == root:
+                        root.parent.left = root.left
+                    else:
+                        root.parent.right = root.left
+                else:
+                    if root.parent.left == root:
+                        root.parent.left = root.right
+                    else:
+                        root.parent.right = root.right
+            root = None
+        else: #case no children
+            if root == self.root: #case root
+                self.root = None
+            else: #case not root (leaf)
+                if root.parent.left == root:
+                    root.parent.left = None
+                else:
+                    root.parent.right = None
+    def _findSmallest(self, root:Node):
+        if not root.left:
+            return root
+        else:
+            return self._findSmallest(root.left)
+
+    def lookup(self, key): #returns None or datatype
+        ret = self._findNode(self.root, key)
+        if ret != None:
+            return ret.data
+        return None
 
 class Node():
     def __init__(self, data=None, left=None, right=None, parent=None):

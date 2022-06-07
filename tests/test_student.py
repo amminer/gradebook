@@ -6,10 +6,20 @@ def test_str():
     s = Student("Hieronymus")
     assert str(s) == "Student Hieronymus:\nEmpty"
 
+def test_eq():
+    s = Student("Alice")
+    t = Student("Alice")
+    y = Student("Loretta")
+    assert s == "Alice"
+    assert s == t
+    assert s != y
+    assert y != "Jim"
+
+
 def test_addGrade():
     s = Student("Hieronymus")
     g = Exam("FINAL!", pointsPossible = 100, pointsEarned = 90)
-    s.addGrade(g)
+    s._addGrade(g)
     assert s.grades.at(0) == "FINAL!"
     assert len(s.grades) == 1
 
@@ -19,24 +29,24 @@ def test_removeGrade():
     b = Exam("Midterm 1", pointsPossible = 200, pointsEarned = 0) #busy partying
     c = Demo("Midterm Demo", pointsEarned = 15)
     try:
-        s.removeGrade("test")
+        s._removeGrade("test")
         assert False #should have failed on bad name input
     except ValueError:
         assert True #good
-    s.addGrade(a)
-    s.addGrade(b)
-    s.addGrade(c)
-    s.removeGrade("Assignment 4")
+    s._addGrade(a)
+    s._addGrade(b)
+    s._addGrade(c)
+    s._removeGrade("Assignment 4")
     assert s.grades.at(0) == b
     assert len(s.grades) == 2
-    s.removeGrade(b)
+    s._removeGrade(b)
     assert s.grades.at(0) == c
     assert len(s.grades) == 1
-    s.addGrade(b)
-    s.removeGrade(b)
+    s._addGrade(b)
+    s._removeGrade(b)
     assert s.grades.at(0) == c
     assert len(s.grades) == 1
-    s.removeGrade(c)
+    s._removeGrade(c)
     assert len(s.grades) == 0
 
 def test_cumulativeGrade():
@@ -47,9 +57,9 @@ def test_cumulativeGrade():
     aw = a.weight
     bw = b.weight
     cw = c.weight
-    s.addGrade(a)
-    s.addGrade(b)
-    s.addGrade(c)
+    s._addGrade(a)
+    s._addGrade(b)
+    s._addGrade(c)
     #points times weights, all together
     assert s.cumulativeGrade() == (17*aw + 187*bw + 14*cw) \
                                 / (135*aw + 200*bw + 20*cw)*100
@@ -62,7 +72,7 @@ def t_addFromCin():
 def t_removeFromCin():
     s = Student("Hieronymus")
     a = Asgmt("a", pointsEarned = 10) #oof
-    s.addGrade(a)
+    s._addGrade(a)
     s.removeFromStdin()
     print(s) #TODO automate
 
@@ -71,9 +81,9 @@ def t_retakeDemo():
     c = Demo("Midterm Demo", pointsEarned = 12)
     d = Demo("Final Demo", pointsEarned = 18)
     f = Exam("FINAL EXAM!")
-    s.addGrade(c)
-    s.addGrade(f)
-    s.addGrade(d)
+    s._addGrade(c)
+    s._addGrade(f)
+    s._addGrade(d)
     s.retakeDemoFromStdin() #try a bad name
     s.retakeDemoFromStdin() #try the right name
     print(s)

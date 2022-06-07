@@ -1,15 +1,11 @@
 ASGMT5:
 [/] BST
-    [X] Node
-    [/] BST
-        [X] insert
-        [X] display
-        [ ] remove
-        [ ] lookup
 [ ] Gradebook
-    [ ] etc
 
 ASGMT4:
+[ ] parameterized pytests?
+[ ] pytest fixtures?
+[...] Learn vscode symbols/documentation habit
 GIT NOTES:
     *have to pay gitlab to host, should maybe set up rpi server
     *generate and add an ssh key for each new device you want to access the repo
@@ -19,6 +15,3 @@ GIT NOTES:
     *git pull origin main
         pulls the most recent version of main to the local repo
     edit and commit as per the usual, just don't forget to commit! Have fun!
-[...] Learn vscode symbols/documentation habit
-[ ] parameterized pytests?
-[ ] pytest fixtures?
