@@ -1,5 +1,6 @@
 ASGMT5:
 [ ] Make sure all vars have getter/setter set up...
+[ ] //all private vars are named accordingly
 [ ] Clean up comments/docs
 [ ] Maybe use Util.presentInterface in places where you forgot to...
 [ ] Maybe automate some tests, maybe learn how to use fixtures properly

@@ -5,7 +5,7 @@ from Gradebook import Gradebook
 
 def test_str():
     s = Student("Hieronymus")
-    assert str(s) == "Student Hieronymus:\nEmpty"
+    assert str(s) == "Student Hieronymus:\nEmpty\n"
 
 def test_eq():
     s = Student("Alice")
