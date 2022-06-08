@@ -207,7 +207,6 @@ def test_randomized():
         tSize -= 1
         assert len(t) == tSize
 
-
 def t_display():
     t = test_insert(True)
     t.display()

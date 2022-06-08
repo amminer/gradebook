@@ -47,15 +47,15 @@ class Util():
         else:
             ret = int(ret)
         if ret < min or ret > max:
-            raise ValueError(f"Input must be between {min} and {max} inclusive")
+            raise ValueError(f"Input must be between {min} and {max} inclusive\n")
         return ret #TODO test
     
     def getStr(self, min:int=0) -> str:
         ret:str = str(input(self.cursor))
         if ret == "!q":
-            raise RecursionError                #is this appropriate?
+            raise RecursionError("Canceled!")
         if len(ret) < min:
-            raise ValueError(f"Input must be at least {min} characters")
+            raise ValueError(f"Input must be at least {min} characters\n")
         return ret #TODO test
 
     def printBadInput(self, badInput:str="") -> None:
@@ -79,9 +79,7 @@ class Util():
     #Handles own ValueErrs
     def presentInterface(self, prompt:str, options:List[str],
                          routines:List[Callable]):
-        print(prompt, self.cursor, sep='\n')
-        for opt in options:
-            print(opt)
+        print(prompt)
         try:
             choice = self.getStr() #! May raise RecursionError if user cancels
             for opt in options:    #  Catch in client code
@@ -89,7 +87,7 @@ class Util():
                     routines[options.index(opt)]()  #call subroutine
                     break
             else: #only executes if break is not reached
-                raise ValueError(f"{choice} is not a valid option")
+                raise ValueError(f"{choice} is not a valid option\n")
         except ValueError as ve:
                 print(ve)
                 self.presentInterface(prompt, options, routines)

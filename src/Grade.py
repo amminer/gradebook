@@ -55,7 +55,7 @@ class Grade(Util):
             self._pointsPossible = newPoints
         else:
             raise ValueError("Invalid # of points possible (must be at least "
-                           + str(self.pointsEarned) + ')')
+                           + str(self.pointsEarned) + ")\n")
 
     @property
     def pointsEarned(self):
@@ -67,7 +67,7 @@ class Grade(Util):
             self._pointsEarned = newPoints
         else:
             raise ValueError("Invalid # of points earned (must be at most "
-                           + str(self.pointsPossible) + ')')
+                           + str(self.pointsPossible) + ")\n")
 
     """ removed - only need to edit on Exam.retake
     def editPEarned(self) -> None:

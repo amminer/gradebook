@@ -18,7 +18,7 @@ class Node():
     @next.setter
     def next(self, newNext):
         if type(newNext) != Node and newNext != None:
-            raise ValueError("Node.next must be a Node")
+            raise ValueError("Node.next must be a Node.\n")
         else:
             self._next = newNext
 
@@ -44,14 +44,14 @@ class LLL():
     
     def __str__(self):
         if not self.head:
-            return "Empty"
+            return "Empty\n"
         return self._strRecursive(self.head)
     def _strRecursive(self, head:Node, ret:str = "") -> str:
         if not head: #head is not None; None is falsy
             return ret
         else:
-            return ret + '\n' + str(head.data) + '\n' \
-                 + self._strRecursive(head.next, ret)
+            return ret + str(head.data) + '\n' \
+                 + self._strRecursive(head.next, ret) + '\n'
 
     def __len__(self):
         return self._countNodesRecursive(self.head)
@@ -65,7 +65,7 @@ class LLL():
     def at(self, index:int): #returns Node's data type...
         ret = self._getAtRecursive(self.head, index)
         if type(ret) == bool and not ret: #don't want to accidentally
-            raise IndexError(f"Index {index} out of range!") #catch falsy
+            raise IndexError(f"Index {index} out of range!\n") #catch falsy
         return ret
     def _getAtRecursive(self, thisNode:Node, index:int):
         if not thisNode or index < 0:
@@ -91,7 +91,7 @@ class LLL():
         thatPrev, thatOne = self._findPairRecursive(self.head, key)
         if type(thatOne) == bool and type(thatPrev) == bool \
            and not thatOne and not thatPrev:
-            raise ValueError(f"{key} was not found")
+            raise ValueError(f"{key} was not found\n")
         else:
             self._remove(thatPrev, thatOne)
     def _findPairRecursive(self, thisNode:Node, key):

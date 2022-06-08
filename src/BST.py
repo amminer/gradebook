@@ -28,7 +28,7 @@ class BST():
         if isinstance(newRoot, Node) or newRoot == None:
             self._root = newRoot
         else:
-            raise ValueError(f"A {type(newRoot)} is not a Node!")
+            raise ValueError(f"A {type(newRoot)} is not a Node!\n")
 
     def display(self):
         self.displayRecursive(self.root)
@@ -45,29 +45,30 @@ class BST():
         else:
             self.insertRecursive(self.root, newNode)
     def insertRecursive(self, root:Node, newNode:Node):
-        if newNode.data <= root.data:
+        if newNode.data < root.data:
             if root.left:
                 self.insertRecursive(root.left, newNode)
             else:
                 root.left = newNode
                 newNode.parent = root
-        else: #newData > root.data
+        elif newNode.data > root.data:
             if root.right:
                 self.insertRecursive(root.right, newNode)
             else:
                 root.right = newNode
                 newNode.parent = root
+        else: #new == existing data
+            #want to pass newData out but don't want to print bulky objects...
+            raise ValueError(f"Invalid input! No duplicate values are allowed\n")
 
     #finds and removes a node with key data if there is one
-    def remove(self, key) -> bool: #returns whether success
+    def remove(self, key) -> None: #may raise ValueError
         if self.root:
             toRemove = self._findNode(self.root, key)
-            if toRemove == None:
-                return False
-            self._remove(toRemove)
-            return True
-        return False
-    def _findNode(self, root:Node, key):
+            if toRemove != None:
+                return self._remove(toRemove)
+        raise ValueError(f"Unable to find {key}\n")
+    def _findNode(self, root:Node, key) -> Node or None:
         if not root:
             return None
         elif root.data == key:
@@ -79,7 +80,7 @@ class BST():
             return ret
     #removes a node using a reference to it
     #do not call with None
-    def _remove(self, root:Node) -> None:
+    def _remove(self, root:Node != None) -> None:
         if root.left and root.right: # case 2 children
             #find the in-order successor
             inOrderSuccessor = self._findSmallest(root.right)
@@ -91,7 +92,6 @@ class BST():
             root.data = tempData
             self._remove(inOrderSuccessor)
         elif (root.left and not root.right) or (root.right and not root.left): #case 1 c
-            print(f"REMOVING {root}")
             if root == self.root: #case root
                 if root.left:
                     self.root = root.left
@@ -112,7 +112,6 @@ class BST():
                     root.right.parent = root.parent
             root = None
         else: #case no children
-            print(f"REMOVING {root}")
             if root == self.root: #case root
                 self.root = None
             else: #case not root (leaf)
@@ -163,7 +162,7 @@ class Node():
         if isinstance(newLeft, Node) or newLeft == None:
             self._left = newLeft
         else:
-            raise ValueError(f"A {type(newLeft)} is not a Node!")
+            raise ValueError(f"A {type(newLeft)} is not a Node!\n")
 
     @property
     def right(self):
@@ -173,7 +172,7 @@ class Node():
         if isinstance(newRight, Node) or newRight == None:
             self._right = newRight
         else:
-            raise ValueError(f"A {type(newRight)} is not a Node!")
+            raise ValueError(f"A {type(newRight)} is not a Node!\n")
 
     @property
     def parent(self):
@@ -183,4 +182,4 @@ class Node():
         if isinstance(newParent, Node) or newParent == None:
             self._parent = newParent
         else:
-            raise ValueError(f"A {type(newParent)} is not a Node!")
+            raise ValueError(f"A {type(newParent)} is not a Node!\n")

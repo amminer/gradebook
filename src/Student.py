@@ -23,8 +23,10 @@ class Student(Util):
             return self.name == other.name
         elif isinstance(other, str):
             return self.name == other
+        elif other == None:
+            return False
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
     
     def __le__(self, other) -> bool:
         if isinstance(other, Student):
@@ -32,7 +34,7 @@ class Student(Util):
         elif isinstance(other, str):
             return other > self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
 
     def __ge__(self, other) -> bool:
         if isinstance(other, Student):
@@ -40,7 +42,7 @@ class Student(Util):
         elif isinstance(other, str):
             return other < self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
 
     def __gt__(self, other) -> bool:
 
@@ -49,7 +51,7 @@ class Student(Util):
         elif isinstance(other, str):
             return other <= self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
 
     def __lt__(self, other) -> bool:
 
@@ -58,7 +60,7 @@ class Student(Util):
         elif isinstance(other, str):
             return other >= self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
 
     def addFromStdin(self):
         try:
@@ -73,7 +75,7 @@ class Student(Util):
             elif type == "asgmt":
                 newGrade = Asgmt()
             else:
-                raise ValueError("Input must match exam, demo, asgmt, or !q")
+                raise ValueError("Input must match exam, demo, asgmt, or !q\n")
             if newGrade.setup():
                 self._addGrade(newGrade)
             else:
@@ -91,7 +93,7 @@ class Student(Util):
         if isinstance(newGrade, Grade):
             self.grades.pushBack(newGrade)
         else:
-            raise ValueError(f"Type mismatch ({newGrade} is not a Grade)")
+            raise ValueError(f"Type mismatch ({newGrade} is not a Grade)\n")
 
     def removeFromStdin(self):
         try:
@@ -112,7 +114,7 @@ class Student(Util):
         if type(keyName) == str or isinstance(keyName, Grade):
             self.grades.remove(keyName)
         else:
-            raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)")
+            raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)\n")
 
     def retakeDemoFromStdin(self):
         print("Enter the name of the demo to retake, or {!q} to cancel:")
@@ -125,6 +127,7 @@ class Student(Util):
             print(ve)
             self.retakeDemoFromStdin()
 
+    #forgot to use presentInterface here, oh well?
     def exam(self, thatExam:Exam or str):
         thisExam = self.grades.lookup(thatExam)
         if thisExam:
@@ -139,14 +142,14 @@ class Student(Util):
                 elif choice == "practice":
                     thisExam.practice()
                 else:
-                    raise ValueError(f"{choice} is not a valid selection")
+                    raise ValueError(f"{choice} is not a valid selection\n")
             except ValueError as ve:
                 print(ve)
                 self.exam(thatExam)
             except RecursionError as re:
                 print(re)
         else:
-            raise ValueError(f"Exam {thatExam} not found")
+            raise ValueError(f"Exam {thatExam} not found\n")
 
     def examFromStdin(self):
         try:
@@ -167,7 +170,7 @@ class Student(Util):
             else:
                 print(f"{thisDemo.name} does not qualify for a retake")
         else:
-            raise ValueError(f"Demo {thatDemo} not found")
+            raise ValueError(f"Demo {thatDemo} not found\n")
 
     """All points so far, weighted and combined"""
     def cumulativeGrade(self) -> float:
@@ -191,35 +194,30 @@ class Student(Util):
         pass #todo
     """
 
-def mainloop(self, cont = True):
-    print('\n' + str(s))
-    print("Would you like to...",
-          "   {Add} a new grade,",
-          "   {Rem}ove a grade,",
-          "   {Retake} a proficiency demo,",
-          "   Look at missed questions from an {exam},"
-          "or {Calc}ulate your total/cumulative grade?",
-          "  ({!q} to quit)", sep='\n')
-    try:
-        choice = self.getStr().lower()
-    except ValueError as ve:
-        print(ve)
-        return self.mainloop()
-    except RecursionError as re:
-        return
-    if choice == "add":
-        self.addFromStdin()
-    elif choice == "rem":
-        self.removeFromStdin()
-    elif choice == "retake":
-        self.retakeDemoFromStdin()
-    elif choice == "exam":
-        self.examFromStdin()
-    elif choice == "calc":
-        print(f"{self.cumulativeGrade():.2f}%")
-    else:
-        print("Invalid selection!")
-    return self.mainloop()
+    def mainloop(self, cont = True) -> None:
+        print('\n' + str(self))
+        if cont:
+            try:
+                self.presentInterface(
+                    "Would you like to...\n"
+                +"{Add} a new grade,\n"
+                +"{Rem}ove a grade,\n"
+                +"{Retake} a proficiency demo,\n"
+                +"Look at missed questions from an {exam},\n"
+                +"or {calc}ulate your total/cumulative grade?\n"
+                +"Enter {!q} to return.",
+                ["add", "rem", "retake", "exam", "calc"],
+                [self.addFromStdin, self.removeFromStdin,
+                    self.retakeDemoFromStdin, self.examFromStdin,
+                    lambda self=self: print(f"{self.cumulativeGrade():.2f}%")])
+            
+            except RecursionError as re:
+                cont = False
+                print("Returning to gradebook...")
+
+            return self.mainloop(cont)
+        else:
+            return
 
 #~~~~~~~~~~~~~~~~~~~END CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
 

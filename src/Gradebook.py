@@ -28,10 +28,101 @@ class Gradebook(Util):
         return
 
     def removeStudentFromStdin(self):
-        pass
+        if len(self.students) == 0:
+            print("No students to remove!")
+            return
+        try:
+            print("Enter the name of the student to remove:")
+            name = self.getStr(1) #may raise VE
+            self.students.remove(name) #may raise VE
 
-    def editStudentFromCin(self):
-        pass
+        except ValueError as ve:
+            print(ve)
+            return self.removeStudentFromStdin()
 
-    def editStudentFromCin(self): #calls Student.mainloop on name match
-        pass
+        except RecursionError as re:
+            print(re)
+
+        return
+
+    def lookupStudentFromStdin(self): #calls Student.mainloop on name match
+        if len(self.students) == 0:
+            print("No students to look up!")
+            return
+        try:
+            print("Enter the name of the student:")
+            name = self.getStr(1) #may raise VE
+            thatOne = self.students.lookup(name)
+            if thatOne != None:
+                print(thatOne)
+            else:
+                raise ValueError(f"Unable to find {name}.\n")
+
+        except ValueError as ve:
+            print(ve)
+            return self.lookupStudentFromStdin()
+        
+        except RecursionError as re:
+            print(re)
+
+        return
+
+    def editStudentFromStdin(self): #calls Student.mainloop on name match
+        if len(self.students) == 0:
+            print("No students to edit!")
+            return
+        try:
+            print("Enter the name of the student to edit:")
+            name = self.getStr(1) #may raise VE
+            thatOne = self.students.lookup(name)
+            if thatOne != None:
+                thatOne.mainloop()
+            else:
+                raise ValueError(f"Unable to find {name}.\n")
+
+        except ValueError as ve:
+            print(ve)
+            return self.editStudentFromStdin()
+        
+        except RecursionError as re:
+            print(re)
+
+        return
+
+    def display(self):
+        if len(self.students) == 0:
+            print("No students to display!")
+        else:
+            print("\n~GRADEBOOK~\n")
+            self.students.display()
+
+    def mainloop(self):
+        cont = True
+        print(" ___ " #TODO write Util.printClippyMessage(str)
+             ,"/ _ \\   _________________________"
+             ,"|O O|  / Hi, I'm Clippy!         \\"
+             ,"||U|||<  Welcome to Gradebook.py! |"
+             ,"||_||| \\__________________________/"
+             ,"\\\\_//", sep='\n')
+        while cont:
+            try:
+                self.presentInterface(
+                    "\n~MAIN MENU~\nWould you like to...\n"
+                   +"{Add} a new student,\n"
+                   +"{Remove} a student,\n"
+                   +"{Lookup} a student,\n"
+                   +"{Edit} a student's grades,\n"
+                   +"or {Display} the contents of the gradebook?\n"
+                   +"Enter {!q} to quit.",
+                   ["add", "remove", "lookup", "edit", "display"],
+                   [self.addStudentFromStdin,
+                   self.removeStudentFromStdin,
+                   self.lookupStudentFromStdin,
+                   self.editStudentFromStdin,
+                   self.display])
+            except RecursionError as re:
+                cont = False
+                print("Thanks for stopping by!")
+
+if __name__ == "__main__":
+    Gradebook().mainloop()

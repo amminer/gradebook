@@ -30,13 +30,11 @@ def test_at():
         l.at(2)
         assert False #should raise IE
     except IndexError as ie:
-        print(ie)
         assert True
     try:
         l.at(-5)
         assert False #should raise IE
     except IndexError as ie:
-        print(ie)
         assert True
     #TODO automate
     
