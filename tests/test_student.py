@@ -1,6 +1,7 @@
 import __init__
 from Student import Student
 from Grade import *
+from Gradebook import Gradebook
 
 def test_str():
     s = Student("Hieronymus")
@@ -15,6 +16,12 @@ def test_eq():
     assert s != y
     assert y != "Jim"
 
+def test_le():
+    t = Student("Alice")
+    y = Student("Loretta")
+    assert isinstance(t, Student) and isinstance(y, Student)
+    assert t <= y
+    assert not y <= t
 
 def test_addGrade():
     s = Student("Hieronymus")
@@ -89,4 +96,4 @@ def t_retakeDemo():
     print(s)
 
 if __name__ == "__main__":
-    t_removeFromCin()
+    test_le()

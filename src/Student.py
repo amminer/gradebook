@@ -1,4 +1,3 @@
-from multiprocessing.sharedctypes import Value
 from Util import *
 from Grade import *
 from LLL import LLL
@@ -24,6 +23,40 @@ class Student(Util):
             return self.name == other.name
         elif isinstance(other, str):
             return self.name == other
+        else:
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+    
+    def __le__(self, other) -> bool:
+        if isinstance(other, Student):
+            return self.name <= other.name
+        elif isinstance(other, str):
+            return other > self.name
+        else:
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+
+    def __ge__(self, other) -> bool:
+        if isinstance(other, Student):
+            return self.name >= other.name
+        elif isinstance(other, str):
+            return other < self.name
+        else:
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+
+    def __gt__(self, other) -> bool:
+
+        if isinstance(other, Student):
+            return self.name > other.name
+        elif isinstance(other, str):
+            return other <= self.name
+        else:
+            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
+
+    def __lt__(self, other) -> bool:
+
+        if isinstance(other, Student):
+            return self.name < other.name
+        elif isinstance(other, str):
+            return other >= self.name
         else:
             raise ValueError(f"Type mismatch ({other} is not a keyname or Student)")
 
@@ -158,9 +191,7 @@ class Student(Util):
         pass #todo
     """
 
-#~~~~~~~~~~~~~~~~~~~END CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
-
-def mainloop(student:Student, cont = True):
+def mainloop(self, cont = True):
     print('\n' + str(s))
     print("Would you like to...",
           "   {Add} a new grade,",
@@ -170,26 +201,29 @@ def mainloop(student:Student, cont = True):
           "or {Calc}ulate your total/cumulative grade?",
           "  ({!q} to quit)", sep='\n')
     try:
-        choice = s.getStr().lower()
+        choice = self.getStr().lower()
     except ValueError as ve:
         print(ve)
-        return mainloop(s)
+        return self.mainloop()
     except RecursionError as re:
         return
     if choice == "add":
-        s.addFromStdin()
+        self.addFromStdin()
     elif choice == "rem":
-        s.removeFromStdin()
+        self.removeFromStdin()
     elif choice == "retake":
-        s.retakeDemoFromStdin()
+        self.retakeDemoFromStdin()
     elif choice == "exam":
-        s.examFromStdin()
+        self.examFromStdin()
     elif choice == "calc":
-        print(f"{s.cumulativeGrade():.2f}%")
+        print(f"{self.cumulativeGrade():.2f}%")
     else:
         print("Invalid selection!")
-    return mainloop(s)
+    return self.mainloop()
 
+#~~~~~~~~~~~~~~~~~~~END CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+"""
 if __name__ == "__main__":
     print("Welcome to assignment 4.")
     s = Student()
@@ -197,3 +231,4 @@ if __name__ == "__main__":
     if s.name != "NOT SET":
         mainloop(s)
     print("Thanks for checking it out!")
+"""

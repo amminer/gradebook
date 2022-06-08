@@ -1,5 +1,8 @@
-from http.client import LENGTH_REQUIRED
-from Student import Student
+from Util import *
+from Grade import *
+from LLL import LLL
+import numpy as np
+from Student import *
 
 class Node():pass #declaration so BST can come first
 
@@ -80,12 +83,15 @@ class BST():
         if root.left and root.right: # case 2 children
             #find the in-order successor
             inOrderSuccessor = self._findSmallest(root.right)
+            #assert inOrderSuccessor != None #DEBUG
+            #assert not (inOrderSuccessor.left and inOrderSuccessor.right)
             #swap it with this node and recurse 
             tempData = inOrderSuccessor.data
             inOrderSuccessor.data = root.data
             root.data = tempData
             self._remove(inOrderSuccessor)
-        elif bool(root.left) ^ bool(root.right): #case 1 c
+        elif (root.left and not root.right) or (root.right and not root.left): #case 1 c
+            print(f"REMOVING {root}")
             if root == self.root: #case root
                 if root.left:
                     self.root = root.left
@@ -97,13 +103,16 @@ class BST():
                         root.parent.left = root.left
                     else:
                         root.parent.right = root.left
+                    root.left.parent = root.parent
                 else:
                     if root.parent.left == root:
                         root.parent.left = root.right
                     else:
                         root.parent.right = root.right
+                    root.right.parent = root.parent
             root = None
         else: #case no children
+            print(f"REMOVING {root}")
             if root == self.root: #case root
                 self.root = None
             else: #case not root (leaf)
@@ -111,6 +120,7 @@ class BST():
                     root.parent.left = None
                 else:
                     root.parent.right = None
+            root = None
     def _findSmallest(self, root:Node):
         if not root.left:
             return root
@@ -129,6 +139,14 @@ class Node():
         self.left = left
         self.right = right
         self.parent = parent
+
+    def __str__(self): #DEBUG
+        ld, rd = None, None
+        if self.left:
+            ld = self.left.data
+        if self.right:
+            rd = self.right.data
+        return str(self.data) + f"LEFT: {ld}, RIGHT: {rd}"
 
     @property
     def data(self):

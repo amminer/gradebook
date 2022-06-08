@@ -1,5 +1,5 @@
 ASGMT5:
-[/] BST
+[X] BST
 [ ] Gradebook
 
 ASGMT4:

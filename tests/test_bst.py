@@ -1,4 +1,5 @@
 import __init__
+from random import randint, shuffle
 from BST import Node, BST
 
 def test_nodeSetters():
@@ -185,9 +186,31 @@ def test_lookup():
     assert t.lookup(4) == None
     assert t.lookup("6") == None #invalid data type
 
+#This revealed a bug to me that my previous tests had not revealed
+#SO important to write automated high throughput tests,
+#feeling ashamed of how little I've done that on this project.
+#Lesson learned.
+def test_randomized():
+    t = BST()
+    MAX = 3000
+    tSize = MAX + 1
+    numbers = [i for i in range(MAX+1)]
+    shuffle(numbers)
+    for i in numbers:
+        t.insert(i)
+    assert len(t) == tSize
+    shuffle(numbers)
+    for i in numbers:
+        assert t.lookup(i) == i
+        t.remove(i)
+        assert t.lookup(i) == None
+        tSize -= 1
+        assert len(t) == tSize
+
+
 def t_display():
     t = test_insert(True)
     t.display()
 
 if __name__ == "__main__":
-    test_remove_leaf()
+    test_randomized()

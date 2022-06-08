@@ -41,7 +41,7 @@ class Util():
     #may throw RecursionError or ValueError
     #(float('inf') produces a number larger than all others)
     def getPosInt(self, min:int=0, max:int=float('inf')) -> int:
-        ret = input(self.cursor)
+        ret = input(self.cursor) #cast to int?
         if ret == "!q":
             raise RecursionError("Canceled!")
         else:
@@ -51,7 +51,7 @@ class Util():
         return ret #TODO test
     
     def getStr(self, min:int=0) -> str:
-        ret:str = input(self.cursor)
+        ret:str = str(input(self.cursor))
         if ret == "!q":
             raise RecursionError                #is this appropriate?
         if len(ret) < min:
