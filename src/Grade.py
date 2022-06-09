@@ -1,11 +1,22 @@
 from Util import * #Util, List
 from random import shuffle
 
-""" CLASS GRADE
+""" Amelia Miner;   Grade.py;   5/24/2022
+CLASS GRADE
 Generalization of leaf classes Exam, Demo, and Asgmt.
     Has int attributes pointsPossible and pointsEarned to represent a score,
-with a UI-entry-point edit function using Util.presentInterface and edit
-subroutines for both attrs (Likely to be overridden in leaf classes? todo).
+methods for calculating percentage and letter grades, and a method for
+determining whether the grade passes.
+    Subclass Exam has boolean attribute _extraCredit and dict[str:str] _questions,
+which maps missed questions to their correct answers, plus methods to add and remove
+missed questions to the dict and to practice the missed questions like flash cards -
+contrived, unsure if appropriate but had a hard time thinking of "jobs". Exams have a
+weight of 4.
+    Subclass Asgmt has a list of subgrades (List[Grade]) _stages, and calculates its
+pointsEarned differently using this collection. Asgmts have a weight of 1.
+    Subclass Demo has additional methods for determining whether a retake is available
+and for performing a retake (editing pointsEarned). It also overrides getLetter(). Demos
+have a weight of 0.
 """
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS GRADE~~~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -149,7 +160,7 @@ class Grade(Util):
             return letters[2]
         elif 80 <= percentage < 90.0:
             return letters[3]
-        elif 90 <= percentage <= 100.0:
+        elif 90 <= percentage:
             return letters[4]
 
     def getPercentage(self) -> float:
@@ -171,7 +182,7 @@ class Grade(Util):
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 # I had a really hard time thinking of a "job" for this class
-#so it keeps a dict of missed questions and allows client code to "practice"
+#so it keeps a dict of missed _questions and allows client code to "practice"
 #against predetermined correct answers, maybe a bit of an overreach for
 #a grade object but here it is
         
@@ -181,24 +192,53 @@ class Exam(Grade):
     def __init__(self, name:str="NOT SET",
                  pointsPossible:int=float('inf'), pointsEarned:int=-1,
                  questions:Dict[str,str]=dict(), extraCredit=False):
-        self.questions:Dict[str,str] = questions
-        self.extraCredit = extraCredit
+        self._questions:Dict[str,str] = questions #get/set via add/remove class funcs
+        self._extraCredit = extraCredit #planning future feature
         super().__init__(name, pointsPossible=pointsPossible,
                          pointsEarned=pointsEarned)
 
+    """ Wanted to incorporate extra credit - future feature
+    def setup(self, superIsSetUp:bool = False) -> bool:
+        if not superIsSetUp:
+            super().setup()
+        choice:int = 0
+        try:
+            print("Apply extra credit to this exam? Enter {y} or {n},\n"
+                + "or {!q} to cancel:")
+            choice = self.getStr(1)
+            if choice == 'y':
+                self._extraCredit = True
+            elif choice == 'n':
+                self._extraCredit = False
+            else:
+                raise ValueError("Input must be \"y\" or \"n\"")
+
+        except ValueError as ve:
+            print(ve)
+            return self.setup(True)
+
+        except RecursionError as re:
+            print(re)
+            return False
+        
+        return True
+    """
+
     def __str__(self) -> str:
         ret:str = ""
-        if self.questions:
-            ret += "\nMissed questions:\n"
-        for q in self.questions.keys():
+        if self._questions:
+            ret += "\nMissed _questions:\n"
+        for q in self._questions.keys():
             ret += q + '\n'
         return super().__str__() + ret
         
     def getPercentage(self) -> float:
         ret:float = super().getPercentage()
-        if self.extraCredit:
-            ret += 5.0
+        #if self._extraCredit:
+        #    ret += 5.0 #unsure if this is how to handle this
         return ret
+
+    #viewMissedQuestions(self)? Maybe in a later update
 
     def addMissedQuestion(self):
         print("Enter the new question:")
@@ -206,7 +246,7 @@ class Exam(Grade):
             newQuestion = self.getStr(1)
             print("Enter the correct answer:")
             newAnswer = self.getStr(1)
-            self.questions[newQuestion] = newAnswer
+            self._questions[newQuestion] = newAnswer
         except ValueError as ve:
             print(ve)
             self.addMissedQuestion()
@@ -218,7 +258,7 @@ class Exam(Grade):
         print("Enter the name of the question to remove:")
         try:
             toRem = self.getStr(1)
-            del self.questions[toRem]
+            del self._questions[toRem]
         except (ValueError, KeyError):  #I deeply dislike this syntax
             print(f"{toRem} was not found...")
             self.removeMissedQuestion()
@@ -227,9 +267,9 @@ class Exam(Grade):
 
     def practice(self):
         answer:str = ""
-        if not self.questions:
+        if not self._questions:
             print("Nothing to practice!")
-        questions = list(self.questions.items()) #make a copy
+        questions = list(self._questions.items()) #make a copy
         shuffle(questions) #mix it up
         for q in questions:
             print(q[0])
@@ -237,12 +277,8 @@ class Exam(Grade):
             try:
                 answer = self.getStr(1)
                 print ("Correct answer:", q[1], sep='\n')
-            except RecursionError as re:
-                print (re)
-                print("Skipping for now...")
-                continue
-            except ValueError as ve:
-                print(ve)
+            except RecursionError or ValueError as e:
+                print(e)
                 print("Skipping for now...")
                 continue
 
@@ -258,7 +294,7 @@ class Asgmt(Grade):
     def __init__(self, name:str="NOT SET", pointsEarned:int=0):
         #     0          1           2           3           4          5
         #  discuss1, draftheaders, discuss2,  progsub1,  progsub2, final/writeup
-        self.stages:List[Grade] = [Grade("discussion post 1",
+        self._stages:List[Grade] = [Grade("discussion post 1",
                                          pointsEarned = -1, pointsPossible=5),
                                    Grade("draft headers",
                                          pointsEarned = -1, pointsPossible = 5),
@@ -270,12 +306,12 @@ class Asgmt(Grade):
                                          pointsEarned = -1, pointsPossible = 10),
                                    Grade("final submission and writeups",
                                          pointsEarned = -1, pointsPossible = 100)]
-        super().__init__(name, sum([g.pointsPossible for g in self.stages]),
+        super().__init__(name, sum([g.pointsPossible for g in self._stages]),
                          pointsEarned)
 
     def __str__(self):
         ret = super().__str__() + "\nStages:\n"
-        for grade in self.stages:
+        for grade in self._stages:
             ret += str(grade) + '\n'
         return ret
 
@@ -287,7 +323,7 @@ class Asgmt(Grade):
             super().setup()
         choice:int = 0
         try:
-            for g in self.stages:
+            for g in self._stages:
                 if g.pointsEarned != -1:
                     continue
                 print(f"For {g.name}, enter the number of points earned "
@@ -300,7 +336,7 @@ class Asgmt(Grade):
         except ValueError as ve:
             print(ve)
             self.setup(True)
-        self.pointsEarned = sum([g.pointsEarned for g in self.stages])
+        self.pointsEarned = sum([g.pointsEarned for g in self._stages])
         return True
 
 #~~~~~~~~~~~~~~~~~~~END CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#

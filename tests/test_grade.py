@@ -2,6 +2,8 @@ import __init__
 from random import randint
 from Grade import Grade, Asgmt, Demo, Exam
 
+""" Amelia Miner;   test_grade.py;  5/26/2022 """
+
 def test_getPercentage() -> None:
     gs = [Grade(pointsPossible=i, pointsEarned = randint(0,i)) for i in range(1,1000)]
     for g in gs:

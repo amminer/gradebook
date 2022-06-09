@@ -3,8 +3,9 @@ from Grade import *
 from LLL import LLL
 import numpy as np
 
-""" CLASS STUDENT
-    Manages a linear linked list of grades
+""" Amelia Miner;   Student.py;   6/2/2022
+CLASS STUDENT
+Manages a linear linked list of grades, defines a CLI for itself.
 """
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
@@ -13,10 +14,10 @@ class Student(Util):
 
     def __init__(self, name:str = "NOT SET"):
         super().__init__(name)
-        self.grades = LLL()
+        self._grades = LLL()
 
     def __str__(self):
-        return f"Student {self.name}:\n{str(self.grades)}"
+        return f"Student {self.name}:\n{str(self._grades)}"
 
     def __eq__(self, other) -> bool:
         if isinstance(other, Student):
@@ -91,7 +92,7 @@ class Student(Util):
     #may raise VE on type mismatch (must be Grade)
     def _addGrade(self, newGrade:Grade):
         if isinstance(newGrade, Grade):
-            self.grades.pushBack(newGrade)
+            self._grades.pushBack(newGrade)
         else:
             raise ValueError(f"Type mismatch ({newGrade} is not a Grade)\n")
 
@@ -112,7 +113,7 @@ class Student(Util):
     # accepts strings or Grades
     def _removeGrade(self, keyName:str):
         if type(keyName) == str or isinstance(keyName, Grade):
-            self.grades.remove(keyName)
+            self._grades.remove(keyName)
         else:
             raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)\n")
 
@@ -129,7 +130,7 @@ class Student(Util):
 
     #forgot to use presentInterface here, oh well?
     def exam(self, thatExam:Exam or str):
-        thisExam = self.grades.lookup(thatExam)
+        thisExam = self._grades.lookup(thatExam)
         if thisExam:
             try:
                 print("Would you like to {add} a question, {rem}ove a question,",
@@ -163,7 +164,7 @@ class Student(Util):
             self.examFromStdin()
 
     def retakeDemo(self, thatDemo:Demo):
-        thisDemo = self.grades.lookup(thatDemo)
+        thisDemo = self._grades.lookup(thatDemo)
         if thisDemo:
             if thisDemo.needsRetake():
                 thisDemo.retake() #may raise RE on cancel - catch in UI
@@ -175,17 +176,17 @@ class Student(Util):
     """All points so far, weighted and combined"""
     def cumulativeGrade(self) -> float:
         """Ideally I would do this, but don't have time to write an iterator
-        weightedPossible = sum([g.pointsPossible*g.weight for g in self.grades])
-        weightedEarned = sum([g.pointsEarned * g.weight for g in self.grades])
+        weightedPossible = sum([g.pointsPossible*g.weight for g in self._grades])
+        weightedEarned = sum([g.pointsEarned * g.weight for g in self._grades])
         """
-        if len(self.grades) == 0:
+        if len(self._grades) == 0:
             return 0.0
         weightedPossible = \
-            np.array([self.grades.at(i).pointsPossible*self.grades.at(i).weight
-                 for i in range(len(self.grades))]).sum()
+            np.array([self._grades.at(i).pointsPossible*self._grades.at(i).weight
+                 for i in range(len(self._grades))]).sum()
         weightedEarned = \
-            np.array([self.grades.at(i).pointsEarned*self.grades.at(i).weight
-                 for i in range(len(self.grades))]).sum()
+            np.array([self._grades.at(i).pointsEarned*self._grades.at(i).weight
+                 for i in range(len(self._grades))]).sum()
         return weightedEarned / weightedPossible * 100
 
     """Generate a report with basic info about what a student's

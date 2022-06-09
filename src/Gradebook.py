@@ -2,21 +2,22 @@ from Grade import * #Util, Grade and subclasses, container typehints
 from Student import Student
 from BST import BST
 
-""" CLASS GRADEBOOK
-Uses a BST to hold students
+""" Amelia Miner;   Gradebook.py;   6/7/2022
+CLASS GRADEBOOK
+Uses a BST to hold students, defines a CLI for itself.
 """
 
 class Gradebook(Util):
     def __init__(self, name:str = "NOT SET"):
         super().__init__(name)
-        self.students:BST[Student] = BST()
+        self._students:BST[Student] = BST()
     
     def addStudentFromStdin(self) -> None:
         try:
             print("Enter the name of the new student:")
             name = self.getStr(1) #may throw RE or VE
             newStudent = Student(name)
-            self.students.insert(newStudent)
+            self._students.insert(newStudent)
 
         except ValueError as ve:
             print(ve)
@@ -28,13 +29,13 @@ class Gradebook(Util):
         return
 
     def removeStudentFromStdin(self):
-        if len(self.students) == 0:
+        if len(self._students) == 0:
             print("No students to remove!")
             return
         try:
             print("Enter the name of the student to remove:")
             name = self.getStr(1) #may raise VE
-            self.students.remove(name) #may raise VE
+            self._students.remove(name) #may raise VE
 
         except ValueError as ve:
             print(ve)
@@ -46,13 +47,13 @@ class Gradebook(Util):
         return
 
     def lookupStudentFromStdin(self): #calls Student.mainloop on name match
-        if len(self.students) == 0:
+        if len(self._students) == 0:
             print("No students to look up!")
             return
         try:
             print("Enter the name of the student:")
             name = self.getStr(1) #may raise VE
-            thatOne = self.students.lookup(name)
+            thatOne = self._students.lookup(name)
             if thatOne != None:
                 print(thatOne)
             else:
@@ -68,13 +69,13 @@ class Gradebook(Util):
         return
 
     def editStudentFromStdin(self): #calls Student.mainloop on name match
-        if len(self.students) == 0:
+        if len(self._students) == 0:
             print("No students to edit!")
             return
         try:
             print("Enter the name of the student to edit:")
             name = self.getStr(1) #may raise VE
-            thatOne = self.students.lookup(name)
+            thatOne = self._students.lookup(name)
             if thatOne != None:
                 thatOne.mainloop()
             else:
@@ -90,11 +91,11 @@ class Gradebook(Util):
         return
 
     def display(self):
-        if len(self.students) == 0:
+        if len(self._students) == 0:
             print("No students to display!")
         else:
             print("\n~GRADEBOOK~\n")
-            self.students.display()
+            self._students.display()
 
     def mainloop(self):
         cont = True

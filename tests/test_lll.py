@@ -2,10 +2,12 @@ import __init__
 from random import randint
 from LLL import LLL
 
+""" Amelia Miner;   test_lll.py;  6/1/2022 """
+
 def test_init_str():
     l = LLL()
     assert not l #empty LLL is falsy
-    assert l.head == None
+    assert l._head == None
     assert l.__str__() == "Empty\n"
     #TODO automate
 

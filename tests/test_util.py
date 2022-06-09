@@ -4,6 +4,8 @@ from random import randint, choice
 from string import ascii_letters
 u = Util()
 
+""" Amelia Miner;   test_util.py;  5/24/2022 """
+
 def randstr(l:int) -> str:
     return "".join(choice(ascii_letters) for _ in range(l))
 

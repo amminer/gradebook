@@ -2,8 +2,7 @@ from typing import List, Tuple, Dict, Callable
 
 """ CLASS UTIL
 contains name:str attribute w/ edit function,
-and basic methods needed by most other classes,
-
+and basic methods needed by most other classes:
 getStr, getPosInt, printBadInput,
 and presentInterface for generalized menu-ing
 """

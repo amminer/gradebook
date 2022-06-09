@@ -3,6 +3,8 @@ from Student import Student
 from Grade import *
 from Gradebook import Gradebook
 
+""" Amelia Miner;   test_student.py;  6/2/2022 """
+
 def test_str():
     s = Student("Hieronymus")
     assert str(s) == "Student Hieronymus:\nEmpty\n"
@@ -27,8 +29,8 @@ def test_addGrade():
     s = Student("Hieronymus")
     g = Exam("FINAL!", pointsPossible = 100, pointsEarned = 90)
     s._addGrade(g)
-    assert s.grades.at(0) == "FINAL!"
-    assert len(s.grades) == 1
+    assert s._grades.at(0) == "FINAL!"
+    assert len(s._grades) == 1
 
 def test_removeGrade():
     s = Student("Hieronymus")
@@ -44,17 +46,17 @@ def test_removeGrade():
     s._addGrade(b)
     s._addGrade(c)
     s._removeGrade("Assignment 4")
-    assert s.grades.at(0) == b
-    assert len(s.grades) == 2
+    assert s._grades.at(0) == b
+    assert len(s._grades) == 2
     s._removeGrade(b)
-    assert s.grades.at(0) == c
-    assert len(s.grades) == 1
+    assert s._grades.at(0) == c
+    assert len(s._grades) == 1
     s._addGrade(b)
     s._removeGrade(b)
-    assert s.grades.at(0) == c
-    assert len(s.grades) == 1
+    assert s._grades.at(0) == c
+    assert len(s._grades) == 1
     s._removeGrade(c)
-    assert len(s.grades) == 0
+    assert len(s._grades) == 0
 
 def test_cumulativeGrade():
     s = Student("Hieronymus")

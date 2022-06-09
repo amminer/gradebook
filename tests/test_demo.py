@@ -2,6 +2,8 @@ import __init__
 from random import randint
 from Grade import Demo
 
+""" Amelia Miner;   test_demo.py;  5/31/2022 """
+
 def test_getLetter() -> None:
     gs = [Demo(pointsEarned = randint(0,20)) for i in range(1,1000)]
     for g in gs:

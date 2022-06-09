@@ -5,6 +5,8 @@ import __init__
 from Gradebook import Gradebook
 from string import ascii_letters
 
+""" Amelia Miner;   test_gradebook.py;  6/6/2022 """
+
 def randstr(l:int) -> str:
     return "".join(choice(ascii_letters) for _ in range(l))
 
@@ -16,7 +18,7 @@ def test_addStudentFromStdin(monkeypatch):
     g.addStudentFromStdin()
     g.addStudentFromStdin()
     g.addStudentFromStdin() #should fail twice then suceed on "ok"
-    assert len(g.students) == 3
+    assert len(g._students) == 3
 
 #WARNING run with pytest --show-capture=no to prevent catastrophic
 #failure of stdout during testing...
