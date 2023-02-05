@@ -1,3 +1,3 @@
 {
-  "tests/test_gradebook.py": true
+  "tests/test_gradebook.py::test_shotgun": true
 }
