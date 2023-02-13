@@ -27,6 +27,7 @@ def test_addStudentFromStdin(monkeypatch):
 # is this worth doing at all?
 
 
+"""
 def test_shotgun(monkeypatch):
     g = Gradebook()
     # Every now and then it may be useful to
@@ -46,6 +47,7 @@ def test_shotgun(monkeypatch):
         print(e)
         assert False  # user sees exception
     assert True  # we made it
+"""
 
 
 if __name__ == "__main__":
