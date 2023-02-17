@@ -2,10 +2,6 @@ TODO
 ===
 
 <ul>
-    <li>[ ] Clean up comments</li>
-        <ul><li>1 day</li></ul>
-    <li>[ ] Add documentation</li>
-        <ul><li>1 day</li></ul>
     <li>[ ] Book UI</li>
         <ul><li>5 days</li></ul>
     <li>[ ] Save and load program state</li>
@@ -21,7 +17,10 @@ IN PROGRESS
 ===
 
 <ul>
-
+    <li>[ ] Clean up comments</li>
+        <ul><li>1 day</li></ul>
+    <li>[ ] Add documentation</li>
+        <ul><li>1 day</li></ul>
 </ul>
 
 

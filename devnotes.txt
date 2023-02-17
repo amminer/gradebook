@@ -1,0 +1,3 @@
+Should BST.display be BST.__str__?
+
+left off cleaning up comments and docs at bst.__remove

@@ -6,13 +6,15 @@ Binary search tree without self-balancing and its node.
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Node():
+    """ a node in the tree contains references to its parent, children, and its data """
     def __init__(self, data=None, left=None, right=None, parent=None):
         self.data = data
         self.left = left
         self.right = right
         self.parent = parent
 
-    def __str__(self): #DEBUG
+    def __str__(self):
+        """ dump node contents to console for debugging """
         ld, rd = None, None
         if self.left:
             ld = self.left.data
@@ -62,6 +64,7 @@ class Node():
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS BST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class BST():
+    """ stores a collection of nodes; not self-balancing """
     def __init__(self, root=None):
         self._root = root
     
@@ -75,42 +78,32 @@ class BST():
                  + self.lenRecursive(root.left) \
                  + self.lenRecursive(root.right)
 
-    """ not appropriate here, I think
-    @property
-    def root(self):
-        return self._root
-    @root.setter
-    def root(self, newRoot):
-        if isinstance(newRoot, Node) or newRoot == None:
-            self._root = newRoot
-        else:
-            raise ValueError(f"A {type(newRoot)} is not a Node!\n")
-    """
-
     def display(self):
-        self.displayRecursive(self._root)
-    def displayRecursive(self, root:Node):
-        if root: #inorder traversal
-            self.displayRecursive(root.left)
+        """ display the data contained in the tree by inorder traversal """
+        self.__displayRecursive(self._root)
+    def __displayRecursive(self, root:Node):
+        """ helper for public-facing dispay function """
+        if root:
+            self.__displayRecursive(root.left)
             print(root.data)
-            self.displayRecursive(root.right)
+            self.__displayRecursive(root.right)
 
     def insert(self, newData):
         newNode = Node(data=newData)
         if not self._root:
             self._root = newNode
         else:
-            self.insertRecursive(self._root, newNode)
-    def insertRecursive(self, root:Node, newNode:Node):
+            self.__insertRecursive(self._root, newNode)
+    def __insertRecursive(self, root:Node, newNode:Node):
         if newNode.data < root.data:
             if root.left:
-                self.insertRecursive(root.left, newNode)
+                self.__insertRecursive(root.left, newNode)
             else:
                 root.left = newNode
                 newNode.parent = root
         elif newNode.data > root.data:
             if root.right:
-                self.insertRecursive(root.right, newNode)
+                self.__insertRecursive(root.right, newNode)
             else:
                 root.right = newNode
                 newNode.parent = root
@@ -118,36 +111,25 @@ class BST():
             #want to pass newData out but don't want to print bulky objects...
             raise ValueError(f"Invalid input! No duplicate values are allowed\n")
 
-    #finds and removes a node with key data if there is one
-    def remove(self, key) -> None: #may raise ValueError
+    def remove(self, key) -> None:
+        """ finds and removes a node data matching key if there is one
+        raises a ValueError if the key is not found
+        """
         if self._root:
-            toRemove = self._findNode(self._root, key)
+            toRemove = self.__findNode(self._root, key)
             if toRemove != None:
-                return self._remove(toRemove)
+                return self.__remove(toRemove)
         raise ValueError(f"Unable to find {key}\n")
-    def _findNode(self, root:Node, key) -> Node or None:
-        if not root:
-            return None
-        elif root.data == key:
-            return root
-        else:
-            ret = self._findNode(root.left, key)
-            if not ret:
-                ret = self._findNode(root.right, key)
-            return ret
     #removes a node using a reference to it
     #do not call with None
-    def _remove(self, root:Node != None) -> None:
+    def __remove(self, root:Node != None) -> None:
         if root.left and root.right: # case 2 children
-            #find the in-order successor
-            inOrderSuccessor = self._findSmallest(root.right)
-            #assert inOrderSuccessor != None #DEBUG
-            #assert not (inOrderSuccessor.left and inOrderSuccessor.right)
-            #swap it with this node and recurse 
+            inOrderSuccessor = self.__findSmallest(root.right)
+            #swap inorder successor with this node and recurse 
             tempData = inOrderSuccessor.data
             inOrderSuccessor.data = root.data
             root.data = tempData
-            self._remove(inOrderSuccessor)
+            self.__remove(inOrderSuccessor)
         elif (root.left and not root.right) or (root.right and not root.left): #case 1 c
             if root == self._root: #case root
                 if root.left:
@@ -177,16 +159,32 @@ class BST():
                 else:
                     root.parent.right = None
             root = None
-    def _findSmallest(self, root:Node):
+    def __findSmallest(self, root:Node):
+        """ helper for public facing remove function (helps to find inorder successor) """
         if not root.left:
             return root
         else:
-            return self._findSmallest(root.left)
+            return self.__findSmallest(root.left)
 
-    def lookup(self, key): #returns None or datatype
-        ret = self._findNode(self._root, key)
+    def lookup(self, key):
+        """ finds and returns the data of a node whose data matches key
+        if there is one; returns None if the key is not found
+        """
+        ret = self.__findNode(self._root, key)
         if ret != None:
             return ret.data
         return None
+
+    def __findNode(self, root:Node, key) -> Node or None:
+        """ helper for public facing remove and lookup functions """
+        if not root:
+            return None
+        elif root.data == key:
+            return root
+        else:
+            ret = self.__findNode(root.left, key)
+            if not ret:
+                ret = self.__findNode(root.right, key)
+            return ret
 
 #~~~~~~~~~~~~~~~~~~~END CLASS BST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
