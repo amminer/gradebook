@@ -165,12 +165,10 @@ class Grade(Util):
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
-# I had a really hard time thinking of a "job" for this class
-#so it keeps a dict of missed _questions and allows client code to "practice"
-#against predetermined correct answers, maybe a bit of an overreach for
-#a grade object but here it is
-        
+
 class Exam(Grade):
+    """ 
+    """
     weight = 4
 
     def __init__(self, name:str="NOT SET",
@@ -211,7 +209,7 @@ class Exam(Grade):
     def __str__(self) -> str:
         ret:str = ""
         if self._questions:
-            ret += "\nMissed _questions:\n"
+            ret += "\nMissed questions:\n"
         for q in self._questions.keys():
             ret += q + '\n'
         return super().__str__() + ret
@@ -221,8 +219,6 @@ class Exam(Grade):
         #if self._extraCredit:
         #    ret += 5.0 #unsure if this is how to handle this
         return ret
-
-    #viewMissedQuestions(self)? Maybe in a later update
 
     def addMissedQuestion(self):
         print("Enter the new question:")
