@@ -1,20 +1,26 @@
-from Util import * #Util, List
+from Util import Util, List, Dict, Tuple
 from random import shuffle
 
 """ Amelia Miner;   Grade.py;   5/24/2022
 CLASS GRADE
 Generalization of leaf classes Exam, Demo, and Asgmt.
-    Has int attributes pointsPossible and pointsEarned to represent a score,
+Has int attributes pointsPossible and pointsEarned to represent a score,
 methods for calculating percentage and letter grades, and a method for
 determining whether the grade passes.
-    Subclass Exam has boolean attribute _extraCredit and dict[str:str] _questions,
+
+CLASS EXAM (extends Grade)
+Subclass Exam has boolean attribute _extraCredit and dict[str:str] _questions,
 which maps missed questions to their correct answers, plus methods to add and remove
 missed questions to the dict and to practice the missed questions like flash cards -
 contrived, unsure if appropriate but had a hard time thinking of "jobs". Exams have a
 weight of 4.
-    Subclass Asgmt has a list of subgrades (List[Grade]) _stages, and calculates its
+
+CLASS ASGMT (extends Grade)
+Subclass Asgmt has a list of subgrades (List[Grade]) _stages, and calculates its
 pointsEarned differently using this collection. Asgmts have a weight of 1.
-    Subclass Demo has additional methods for determining whether a retake is available
+
+CLASS DEMO (extends Grade)
+Subclass Demo has additional methods for determining whether a retake is available
 and for performing a retake (editing pointsEarned). It also overrides getLetter(). Demos
 have a weight of 0.
 """
@@ -24,17 +30,19 @@ have a weight of 0.
 """
 
 class Grade(Util):
+    """ Parent class for all grade subtypes -
+    stores points earned/points possible and contains methods for calculating percent
+    """
     weight = 1
     
     def __init__(self, name:str="NOT SET", pointsPossible:float=float('inf'),
                 pointsEarned:int=-1):
-        #any way to make this const per class/instance?
         super().__init__(name)
         self._pointsPossible = pointsPossible
-        self._pointsEarned = pointsEarned #asgmt subgrades need direct access
+        self._pointsEarned = pointsEarned
 
-    #for string keynames or Grades
     def __eq__(self, other):
+        """ Compares this grade's name with that of another grade, or a string """
         if type(other) == str:
             return self.name == other
         elif isinstance(other, Grade):
@@ -43,14 +51,22 @@ class Grade(Util):
             return False
 
     def __str__(self):
-        ret = self.name + ':'
-        nameLen = len(self.name) + 1 #1 for colon
-        numTabs = 5 #todo change?
+        """ prints this grade's name, the number of points earned and the
+        number of points possible, the grade as a percent, and the associated
+        letter grade for that percent value. Uses the length of the name to
+        pad output with tabs for consistent table-like display.
+        """
+        nameLen = len(self.name) + 1
+        numTabs = 5
         while nameLen >= 8:
             numTabs -= 1
             nameLen -= 8
             if numTabs == 0:
                 break
+        if len(self.name) <= 37:
+            ret = self.name + ':'
+        else:
+            ret = self.name[:37] + "..."
         ret += '\t' * numTabs
         ret += f"{self.pointsEarned}/{self.pointsPossible} points (" \
              + f"{self.getPercentage():.2f}%, {self.getLetter()})"
@@ -80,37 +96,8 @@ class Grade(Util):
             raise ValueError("Invalid # of points earned (must be at most "
                            + str(self.pointsPossible) + ")\n")
 
-    """ removed - only need to edit on Exam.retake
-    def editPEarned(self) -> None:
-        print("Enter the new # of points earned, or !q to cancel",
-              "(must be <= points possible):")
-        try:
-            newPoints = self.getPosInt() #could pass in self.pointsPossible as max
-            self.pointsEarned = newPoints
-        except ValueError:
-            self.printBadInput(newPoints)
-            self.editPEarned()
-        except RecursionError: #user cancels or recursion depth exceeded
-            print("canceled!") #return to calling scope
-    """
-
-    """ removed - only need to edit on Exam.retake
-    def editPPossible(self) -> None:
-        print("Enter the new # of points possible, or !q to cancel:")
-        try:
-            newPoints = self.getPosInt()
-            self.pointsPossible = newPoints
-        except ValueError:
-            self.printBadInput(newPoints)
-            self.editPPossible()
-        except RecursionError: #user cancels or recursion depth exceeded
-            print("canceled!") #return to calling scope
-    """
-
-    #Allows RecursionErrors to be passed to client code if user cancels
-    #MUST handle in client code - RecursionError signifies user cancelling setup,
-    #should cancel addition of new grade object
     def setup(self) -> None:
+        """ UI and business logic for setting up a new grade object """
         choice:str = ""
         try:
             if self.name == "NOT SET":
@@ -134,23 +121,16 @@ class Grade(Util):
         return True
 
     def edit(self) -> None:
+        """ UI and business logic for editing an existing grade object """
         try:
             self.editName()
-            """ removed - only need to edit on Exam.retake
-            self.presentInterface( #Catches ValueErrors
-                "Would you like to edit the\n{name}, points {pos}sible,"
-            + "or points {ear}ned?",
-                ["name", "pos", "ear"],
-                [self.editName,
-                self.editPPossible,
-                self.editPEarned]
-            )
-            """
         except RecursionError as re: #user cancels or recursion depth exceeded
             print(re) #return to calling scope
 
-    #should give an option for +/- system?
     def getLetter(self, letters:Tuple[str]=['F','D','C','B','A']) -> str:
+        """ uses Grade.getPercentage to determine a letter grade;
+        letters argument allows for different grading schemes
+        """
         percentage = self.getPercentage()
         if percentage < 60.0:
             return letters[0]
@@ -164,6 +144,7 @@ class Grade(Util):
             return letters[4]
 
     def getPercentage(self) -> float:
+        """ uses pointsPossible and pointsEarned to calculate a percentage grade """
         if self.pointsPossible == 0:
             percentage = 0.0
         else:
@@ -171,6 +152,9 @@ class Grade(Util):
         return percentage
 
     def passes(self, percentageNeeded:float=70.0) -> bool:
+        """ uses Grade.getPercentage to determine whether the grade is passing
+        percentageNeeded argument allows for different requirements for passing
+        """
         if percentageNeeded < 0: percentageNeeded = 0.0
         elif percentageNeeded > 100: percentageNeeded = 100.0
         return self.getPercentage() >= percentageNeeded

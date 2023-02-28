@@ -6,7 +6,9 @@ Binary search tree without self-balancing and its node.
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Node():
-    """ a node in the tree contains references to its parent, children, and its data """
+    """ a node in the tree contains references to its parent, children,
+    and its data
+    """
     def __init__(self, data=None, left=None, right=None, parent=None):
         self.data = data
         self.left = left
@@ -109,7 +111,7 @@ class BST():
                 newNode.parent = root
         else: #new == existing data
             #want to pass newData out but don't want to print bulky objects...
-            raise ValueError(f"Invalid input! No duplicate values are allowed\n")
+            raise ValueError(f"Invalid input! No duplicate values allowed\n")
 
     def remove(self, key) -> None:
         """ finds and removes a node data matching key if there is one
@@ -120,23 +122,43 @@ class BST():
             if toRemove != None:
                 return self.__remove(toRemove)
         raise ValueError(f"Unable to find {key}\n")
-    #removes a node using a reference to it
-    #do not call with None
     def __remove(self, root:Node != None) -> None:
-        if root.left and root.right: # case 2 children
+        """ internal method for removing a node using a reference to it;
+        should only be called by public-facing remove function.
+        There are 3 broad cases (2 children, 1 child, and leaf)
+        with sub-cases for cases 2 and 3:
+        1. In the case that the node has 2 children, swap it with its inorder
+        successor and remove the node now that it's a leaf.
+        2. In the case that then node has 1 child,
+            a. if the node is the tree's root, change the tree's root to be
+            the node's child.
+            b. if the node is not the root, set the node's child's parent
+            attribute to point to the node's parent and set the parent's child
+            (left or right) attribute to point to the node's child.
+        3. In the case that the root has no children,
+            a. if the node is the root, the tree is empty; set root to None.
+            b. if the node is not the root, it is a leaf; set the appropriate
+            parent pointer to None.
+        Finally, in all cases, set the node to None.
+        """
+        # 1. case two children
+        if root.left and root.right:
             inOrderSuccessor = self.__findSmallest(root.right)
-            #swap inorder successor with this node and recurse 
+            # swap inorder successor with this node
             tempData = inOrderSuccessor.data
             inOrderSuccessor.data = root.data
             root.data = tempData
             self.__remove(inOrderSuccessor)
-        elif (root.left and not root.right) or (root.right and not root.left): #case 1 c
-            if root == self._root: #case root
+        # 2. case one child
+        elif (root.left and not root.right) or (root.right and not root.left):
+            # a. case root
+            if root == self._root:
                 if root.left:
                     self._root = root.left
                 else:
                     self._root = root.right
-            else: #case not root
+            # b. case not root
+            else:
                 if root.left:
                     if root.parent.left == root:
                         root.parent.left = root.left
@@ -150,17 +172,22 @@ class BST():
                         root.parent.right = root.right
                     root.right.parent = root.parent
             root = None
-        else: #case no children
-            if root == self._root: #case root
+        # 3. case no children
+        else:
+            # a. case root
+            if root == self._root:
                 self._root = None
-            else: #case not root (leaf)
+            # b. case not root (leaf)
+            else:
                 if root.parent.left == root:
                     root.parent.left = None
                 else:
                     root.parent.right = None
             root = None
     def __findSmallest(self, root:Node):
-        """ helper for public facing remove function (helps to find inorder successor) """
+        """ helper for public facing remove function
+        (finds inorder successor)
+        """
         if not root.left:
             return root
         else:

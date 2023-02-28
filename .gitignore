@@ -1,3 +1,5 @@
 .pytest_cache/
 tests/__pycache__/
 *.pyc
+src/Grade.py
+.pytest_cache/v/cache/lastfailed
