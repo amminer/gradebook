@@ -11,7 +11,11 @@ Manages a linear linked list of grades, defines a CLI for itself.
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Student(Util):
-
+    """ contains a list of grades and implements a user interface to be
+    swapped in/out with the Gradebook UI.
+    Note that there is no option for editing existing grades outside of
+    retaking a proficiency demo.
+    """
     def __init__(self, name:str = "NOT SET"):
         super().__init__(name)
         self._grades = LLL()
@@ -20,6 +24,7 @@ class Student(Util):
         return f"Student {self.name}:\n{str(self._grades)}"
 
     def __eq__(self, other) -> bool:
+        """ compares by name strings """
         if isinstance(other, Student):
             return self.name == other.name
         elif isinstance(other, str):
@@ -27,43 +32,46 @@ class Student(Util):
         elif other == None:
             return False
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
+            raise ValueError(f"Type mismatch ({other} is not a name or Student)\n")
     
     def __le__(self, other) -> bool:
+        """ compares by name strings """
         if isinstance(other, Student):
             return self.name <= other.name
         elif isinstance(other, str):
             return other > self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
+            raise ValueError(f"Type mismatch ({other} is not a name or Student)\n")
 
     def __ge__(self, other) -> bool:
+        """ compares by name strings """
         if isinstance(other, Student):
             return self.name >= other.name
         elif isinstance(other, str):
             return other < self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
+            raise ValueError(f"Type mismatch ({other} is not a name or Student)\n")
 
     def __gt__(self, other) -> bool:
-
+        """ compares by name strings """
         if isinstance(other, Student):
             return self.name > other.name
         elif isinstance(other, str):
             return other <= self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
+            raise ValueError(f"Type mismatch ({other} is not a name or Student)\n")
 
     def __lt__(self, other) -> bool:
-
+        """ compares by name strings """
         if isinstance(other, Student):
             return self.name < other.name
         elif isinstance(other, str):
             return other >= self.name
         else:
-            raise ValueError(f"Type mismatch ({other} is not a keyname or Student)\n")
+            raise ValueError(f"Type mismatch ({other} is not a name or Student)\n")
 
     def addFromStdin(self):
+        """ UI for adding a grade to the student's list """
         try:
             print("Which is the type of the new grade?",
                   "{Exam}", "Proficicency {Demo}", "or Programming {Asgmt}?",
@@ -78,46 +86,30 @@ class Student(Util):
             else:
                 raise ValueError("Input must match exam, demo, asgmt, or !q\n")
             if newGrade.setup():
-                self._addGrade(newGrade)
+                self._grades.pushBack(newGrade)
             else:
                 print("Canceled addition")
-
         except RecursionError as re:
             print(re)
-
         except ValueError as ve:
             print(ve)
             self.addFromStdin()
 
-    #may raise VE on type mismatch (must be Grade)
-    def _addGrade(self, newGrade:Grade):
-        if isinstance(newGrade, Grade):
-            self._grades.pushBack(newGrade)
-        else:
-            raise ValueError(f"Type mismatch ({newGrade} is not a Grade)\n")
-
     def removeFromStdin(self):
+        """ UI for removing a grade to the student's list """
         try:
             print("Enter the name of the grade you'd like to remove",
             "or {!q} to cancel:", sep='\n')
             name = self.getStr(1)
-            self._removeGrade(name) #throws VE on not found
-
+            self._grades.remove(name)
         except RecursionError as re:
             print(re)
-
         except ValueError as ve:
             print(ve)
             self.removeFromStdin()
 
-    # accepts strings or Grades
-    def _removeGrade(self, keyName:str):
-        if type(keyName) == str or isinstance(keyName, Grade):
-            self._grades.remove(keyName)
-        else:
-            raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)\n")
-
     def retakeDemoFromStdin(self):
+        """ UI for retaking (editing) a student's demo grade """
         print("Enter the name of the demo to retake, or {!q} to cancel:")
         try:
             choice = self.getStr(1)
@@ -128,8 +120,10 @@ class Student(Util):
             print(ve)
             self.retakeDemoFromStdin()
 
-    #forgot to use presentInterface here, oh well?
     def exam(self, thatExam:Exam or str):
+        """ UI for interacting with a student's exam (adding or removing questions,
+        practicing missed questions)
+        """
         thisExam = self._grades.lookup(thatExam)
         if thisExam:
             try:
@@ -153,6 +147,7 @@ class Student(Util):
             raise ValueError(f"Exam {thatExam} not found\n")
 
     def examFromStdin(self):
+        """ UI for finding an exam by name to interact with """
         try:
             print("Enter the name of the exam, or {!q} to cancel:")
             name = self.getStr()
@@ -164,21 +159,20 @@ class Student(Util):
             self.examFromStdin()
 
     def retakeDemo(self, thatDemo:Demo):
+        """ UI for interacting with a Demo grade (retaking)
+        Note that Demo.retake may raise a RecursionError on user cancellation,
+        which must be handled in calling code """
         thisDemo = self._grades.lookup(thatDemo)
         if thisDemo:
             if thisDemo.needsRetake():
-                thisDemo.retake() #may raise RE on cancel - catch in UI
+                thisDemo.retake()
             else:
                 print(f"{thisDemo.name} does not qualify for a retake")
         else:
             raise ValueError(f"Demo {thatDemo} not found\n")
 
-    """All points so far, weighted and combined"""
     def cumulativeGrade(self) -> float:
-        """Ideally I would do this, but don't have time to write an iterator
-        weightedPossible = sum([g.pointsPossible*g.weight for g in self._grades])
-        weightedEarned = sum([g.pointsEarned * g.weight for g in self._grades])
-        """
+        """ Computes all points so far, weighted and combined """
         if len(self._grades) == 0:
             return 0.0
         weightedPossible = \
@@ -189,13 +183,10 @@ class Student(Util):
                  for i in range(len(self._grades))]).sum()
         return weightedEarned / weightedPossible * 100
 
-    """Generate a report with basic info about what a student's
-    best and worst areas are in terms of grade types, maybe asgmt subgrades
-    def report(self):
-        pass #todo
-    """
-
     def mainloop(self, cont = True) -> None:
+        """ Top level interface for interacting with a student object;
+        pass-off point between Student and Gradebook
+        """
         print('\n' + str(self))
         if cont:
             try:
@@ -221,13 +212,3 @@ class Student(Util):
             return
 
 #~~~~~~~~~~~~~~~~~~~END CLASS STUDENT~~~~~~~~~~~~~~~~~~~~~~~~~#
-
-"""
-if __name__ == "__main__":
-    print("Welcome to assignment 4.")
-    s = Student()
-    s.editName()
-    if s.name != "NOT SET":
-        mainloop(s)
-    print("Thanks for checking it out!")
-"""

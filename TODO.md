@@ -8,6 +8,8 @@ TODO
         <ul><li>1 day</li></ul>
     <li>Apply DRY principle/eliminate duplicate code</li>
         <ul><li>2 days</li></ul>
+    <li>Ensure all menus go through Util class</li>
+        <ul><li>1 day</li></ul>
     <li>Change display to clear screen on new menus</li>
         <ul><li>1 day</li></ul>
     <li>Book UI</li>
