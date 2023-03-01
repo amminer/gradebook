@@ -9,6 +9,9 @@ and presentInterface for generalized menu-ing
 
 
 class Util:
+    """ base class for almost everything else in the program,
+    contains basic data and functions - may be an overzealous abstraction?
+    """
     cursor = "~>"
 
     def __init__(self, newName: str = "NOT SET"):
@@ -23,9 +26,10 @@ class Util:
         if len(newName) > 0:
             self._name = str(newName)
 
-    # handles any RecursionError or ValueError
-    # (must be called from leaf-class's edit() function!)
     def editName(self):
+        """ edits name param,
+        handling exceptions for bad vals and user cancellation
+        """
         print(
             "Enter a new name"
             + "(recommended maximum of 39 characters for display integrity)",
@@ -40,9 +44,12 @@ class Util:
         except RecursionError as re:  # user cancels or recursion depth exceeded
             print(re)  # return to calling scope
 
-    # may throw RecursionError or ValueError
-    # (float('inf') produces a number larger than all others)
     def getPosInt(self, min: int = 0, max: int = float("inf")) -> int:
+        """ takes user input in the form of a positive integer, with some flexibility;
+        calling code may allow for negative integers, but default min of 0
+        may raise a ValueError if user gives bad input,
+        or a RecursionError if user cancels
+        """
         ret = input(self.cursor)  # cast to int?
         print()
         if ret == "!q":
@@ -51,47 +58,42 @@ class Util:
             ret = int(ret)
         if ret < min or ret > max:
             raise ValueError(f"Input must be between {min} and {max} inclusive\n")
-        return ret  # TODO test
+        return ret 
 
     def getStr(self, min: int = 0) -> str:
+        """ takes user input in the form of a string, allowing for calling code
+        to demand that the input have a certain length
+        may raise a ValueError if user gives bad input,
+        or a RecursionError if user cancels
+        """
         ret: str = str(input(self.cursor))
         print()
         if ret == "!q":
             raise RecursionError("Canceled!")
         if len(ret) < min:
             raise ValueError(f"Input must be at least {min} characters\n")
-        return ret  # TODO test
+        return ret
 
-    def printBadInput(self, badInput: str = "") -> None:
-        output = ""
-        output += "Invalid input!"
-        if badInput != None and badInput != "":
-            output += f' ("{badInput}" is bad input)'
-        print(output)
-        return
-
-    """ PRESENTINTERFACE
-            Takes a string prompt, a list of strings `options`, and
-        a list of functions 'routines' which must be set up as parallel
-        arrays.
-            Prints the prompt and the options, takes input, checks input
+    def presentInterface(
+        self, prompt: str, options: List[str], routines: List[Callable]):
+        """Takes a string prompt, a list of strings `options`, and
+        a list of functions 'routines'
+        which must be set up as parallel arrays
+        Prints the prompt and the options, takes input, checks input
         against the options and calls *ALL* matching-indexed function calls
         based on the strings in the options list.
-            subroutines must take no args (for now? TODO)
-    """
-    # May raise a RE that must be handled in client code!
-    # Handles own ValueErrs
-    def presentInterface(
-        self, prompt: str, options: List[str], routines: List[Callable]
-    ):
+        subroutines must take no args...
+        Note that this does not catch RecursionErrors that may be raised
+        by getStr - if user cancels, must handle in client code
+        """
         print(prompt)
         try:
-            choice = self.getStr()  #! May raise RecursionError if user cancels
-            for opt in options:  #  Catch in client code
+            choice = self.getStr()
+            for opt in options:
                 if opt == choice:
-                    routines[options.index(opt)]()  # call subroutine
+                    routines[options.index(opt)]()
                     break
-            else:  # only executes if break is not reached
+            else:
                 raise ValueError(f"{choice} is not a valid option\n")
         except ValueError as ve:
             print(ve)
