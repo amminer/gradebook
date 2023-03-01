@@ -2,10 +2,6 @@ TODO
 ===
 
 <ul>
-    <li>Add custom exception instead of overusing recursionerror</li>
-        <ul><li>1 day</li></ul>
-    <li>Rename head/root params in data structure functions for clarity</li>
-        <ul><li>1 day</li></ul>
     <li>Apply DRY principle/eliminate duplicate code</li>
         <ul><li>2 days</li></ul>
     <li>Ensure all menus go through Util class</li>
@@ -27,9 +23,9 @@ IN PROGRESS
 ===
 
 <ul>
-    <li>Clean up comments</li>
+    <li>Add custom exception instead of overusing recursionerror</li>
         <ul><li>1 day</li></ul>
-    <li>Add documentation</li>
+    <li>Rename head/root params in data structure functions for clarity</li>
         <ul><li>1 day</li></ul>
 </ul>
 
@@ -38,5 +34,8 @@ DONE
 ===
 
 <ul>
-
+    <li>Clean up comments</li>
+        <ul><li>1 day</li></ul>
+    <li>Add documentation</li>
+        <ul><li>1 day</li></ul>
 </ul>
