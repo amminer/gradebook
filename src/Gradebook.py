@@ -3,33 +3,39 @@ from Student import Student
 from BST import BST
 
 """ Amelia Miner;   Gradebook.py;   6/7/2022
+Entry point for the program
 CLASS GRADEBOOK
 Uses a BST to hold students, defines a CLI for itself.
 """
 
-
 class Gradebook(Util):
+    """ Manages a collection of students and presents the top level UI
+    students are kept in a BST (_students)
+    """
     def __init__(self, name: str = "NOT SET"):
         super().__init__(name)
         self._students: BST[Student] = BST()
 
     def addStudentFromStdin(self) -> None:
+        """ prompts user to enter the name of a new student
+        and adds that student to the BST
+        """
         try:
             print("Enter the name of the new student:")
             name = self.getStr(1)  # may throw RE or VE
             newStudent = Student(name)
             self._students.insert(newStudent)
-
         except ValueError as ve:
             print(ve)
             return self.addStudentFromStdin()
-
         except RecursionError as re:
             print(re)
-
         return
 
     def removeStudentFromStdin(self):
+        """ prompts user to enter the name of an existing student
+        and removes that student from the BST
+        """
         if len(self._students) == 0:
             print("No students to remove!")
             return
@@ -37,17 +43,18 @@ class Gradebook(Util):
             print("Enter the name of the student to remove:")
             name = self.getStr(1)  # may raise VE
             self._students.remove(name)  # may raise VE
-
         except ValueError as ve:
             print(ve)
             return self.removeStudentFromStdin()
-
         except RecursionError as re:
             print(re)
-
         return
 
-    def lookupStudentFromStdin(self):  # calls Student.mainloop on name match
+    def lookupStudentFromStdin(self):
+        """ prompts the user to enter the name of an existing student
+        and finds that student in the BST if there is a match.
+        If so, prints the student's grades.
+        """
         if len(self._students) == 0:
             print("No students to look up!")
             return
@@ -69,7 +76,11 @@ class Gradebook(Util):
 
         return
 
-    def editStudentFromStdin(self):  # calls Student.mainloop on name match
+    def editStudentFromStdin(self):
+        """ prompts the user to enter the name of an existing student
+        and finds that student in the BST if there is a match.
+        If so, passes UI control to the student object for editing.
+        """
         if len(self._students) == 0:
             print("No students to edit!")
             return
@@ -92,6 +103,7 @@ class Gradebook(Util):
         return
 
     def display(self):
+        """ prints the contents of the gradebook """
         if len(self._students) == 0:
             print("No students to display!")
         else:
@@ -99,8 +111,9 @@ class Gradebook(Util):
             self._students.display()
 
     def mainloop(self):
+        """ top level menu for the program """
         cont = True
-        print(" ___ "  # TODO write Util.printClippyMessage(str)
+        print(" ___ "
               , "/ _ \\   _________________________", "|O O|  / Hi, I'm Clippy!         \\", "||U|||<  Welcome to Gradebook.py! |", "||_||| \\__________________________/", "\\\\_//", sep='\n')
         while cont:
             try:

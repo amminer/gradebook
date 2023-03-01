@@ -4,6 +4,12 @@ TODO
 <ul>
     <li>Add custom exception instead of overusing recursionerror</li>
         <ul><li>1 day</li></ul>
+    <li>Rename head/root params in data structure functions for clarity</li>
+        <ul><li>1 day</li></ul>
+    <li>Apply DRY principle/eliminate duplicate code</li>
+        <ul><li>2 days</li></ul>
+    <li>Change display to clear screen on new menus</li>
+        <ul><li>1 day</li></ul>
     <li>Book UI</li>
         <ul><li>5 days</li></ul>
     <li>Save and load program state</li>
