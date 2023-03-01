@@ -86,7 +86,7 @@ class Student(Util):
             else:
                 raise ValueError("Input must match exam, demo, asgmt, or !q\n")
             if newGrade.setup():
-                self._grades.pushBack(newGrade)
+                self._addGrade(newGrade)
             else:
                 print("Canceled addition")
         except RecursionError as re:
@@ -94,6 +94,12 @@ class Student(Util):
         except ValueError as ve:
             print(ve)
             self.addFromStdin()
+    def _addGrade(self, newGrade:Grade):
+        """ Function separated out for easier testing """
+        if isinstance(newGrade, Grade):
+            self._grades.pushBack(newGrade)
+        else:
+            raise ValueError(f"Type mismatch ({newGrade} is not a Grade)\n")
 
     def removeFromStdin(self):
         """ UI for removing a grade to the student's list """
@@ -101,12 +107,18 @@ class Student(Util):
             print("Enter the name of the grade you'd like to remove",
             "or {!q} to cancel:", sep='\n')
             name = self.getStr(1)
-            self._grades.remove(name)
+            self._removeGrade(name)
         except RecursionError as re:
             print(re)
         except ValueError as ve:
             print(ve)
             self.removeFromStdin()
+    def _removeGrade(self, keyName:str):
+        """ Function separated out for easier testing """
+        if type(keyName) == str or isinstance(keyName, Grade):
+            self._grades.remove(keyName)
+        else:
+            raise ValueError(f"Type mismatch ({keyName} is not a string or a Grade)\n")
 
     def retakeDemoFromStdin(self):
         """ UI for retaking (editing) a student's demo grade """
