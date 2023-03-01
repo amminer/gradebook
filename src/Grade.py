@@ -96,8 +96,12 @@ class Grade(Util):
             raise ValueError("Invalid # of points earned (must be at most "
                            + str(self.pointsPossible) + ")\n")
 
-    def setup(self) -> None:
-        """ UI and business logic for setting up a new grade object """
+    def setup(self) -> bool:
+        """ UI and business logic for setting up a new grade object
+        unique in that it returns a boolean for whether the object was
+        successfully set up so that the calling code knows whether it has
+        a complete grade - if it does, add it to the student, else discard
+        """
         choice:str = ""
         try:
             if self.name == "NOT SET":
@@ -167,19 +171,20 @@ class Grade(Util):
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS EXAM~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Exam(Grade):
-    """ 
+    """ Includes basic Grade functionality, plus boolean extra credit data member
+    which is applied to percent value on calculation.
+    Also contains a map of missed questions -> correct answers so that missed questions can be studied by the student, and methods for managing this map.
     """
     weight = 4
 
     def __init__(self, name:str="NOT SET",
                  pointsPossible:int=float('inf'), pointsEarned:int=-1,
                  questions:Dict[str,str]=dict(), extraCredit=False):
-        self._questions:Dict[str,str] = questions #get/set via add/remove class funcs
-        self._extraCredit = extraCredit #planning future feature
+        self._questions:Dict[str,str] = questions
+        self._extraCredit = extraCredit
         super().__init__(name, pointsPossible=pointsPossible,
                          pointsEarned=pointsEarned)
 
-    """ Wanted to incorporate extra credit - future feature
     def setup(self, superIsSetUp:bool = False) -> bool:
         if not superIsSetUp:
             super().setup()
@@ -194,19 +199,17 @@ class Exam(Grade):
                 self._extraCredit = False
             else:
                 raise ValueError("Input must be \"y\" or \"n\"")
-
         except ValueError as ve:
             print(ve)
             return self.setup(True)
-
         except RecursionError as re:
             print(re)
             return False
         
         return True
-    """
 
     def __str__(self) -> str:
+        """ Calls base class __str__ and handles missed questions """
         ret:str = ""
         if self._questions:
             ret += "\nMissed questions:\n"
@@ -215,12 +218,14 @@ class Exam(Grade):
         return super().__str__() + ret
         
     def getPercentage(self) -> float:
+        """ same as superclass but incorporates extra credit """
         ret:float = super().getPercentage()
-        #if self._extraCredit:
-        #    ret += 5.0 #unsure if this is how to handle this
+        if self._extraCredit:
+            ret += 5.0
         return ret
 
     def addMissedQuestion(self):
+        """ adds a missed question to the map """
         print("Enter the new question:")
         try:
             newQuestion = self.getStr(1)
@@ -231,9 +236,10 @@ class Exam(Grade):
             print(ve)
             self.addMissedQuestion()
         except RecursionError as re:
-            print(re) #return to calling scope
+            print(re)
 
     def removeMissedQuestion(self):
+        """ removes a missed question from the map """
         toRem:str = ""
         print("Enter the name of the question to remove:")
         try:
@@ -249,9 +255,7 @@ class Exam(Grade):
         answer:str = ""
         if not self._questions:
             print("Nothing to practice!")
-        questions = list(self._questions.items()) #make a copy
-        shuffle(questions) #mix it up
-        for q in questions:
+        for q in shuffle(list(self._questions.items())):
             print(q[0])
             print("Enter your answer:")
             try:
@@ -270,7 +274,10 @@ class Exam(Grade):
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS ASGMT~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Asgmt(Grade):
-    #points possible always same for asgmts; pointsE determined in setup
+    """ includes basic Grade functionality, but contains a list of sub-grades
+    one for each stage of the assignment. Points possible and points earned for the
+    overall assignment are calculated based on sums from this list.
+    """
     def __init__(self, name:str="NOT SET", pointsEarned:int=0):
         #     0          1           2           3           4          5
         #  discuss1, draftheaders, discuss2,  progsub1,  progsub2, final/writeup
@@ -290,15 +297,14 @@ class Asgmt(Grade):
                          pointsEarned)
 
     def __str__(self):
+        """ calls superclass __str__ as well as handling stages """
         ret = super().__str__() + "\nStages:\n"
         for grade in self._stages:
             ret += str(grade) + '\n'
         return ret
 
-    #Allows RecursionErrors to be passed to client code if user cancels
-    #MUST handle in client code - RecursionError signifies user cancelling setup,
-    #should cancel addition of new grade object
     def setup(self, superIsSetUp:bool = False) -> bool:
+        """ calls superclass setup as well as prompting user to fill out stages """
         if not superIsSetUp:
             super().setup()
         choice:int = 0
@@ -327,6 +333,10 @@ class Asgmt(Grade):
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 class Demo(Grade):
+    """ demos are a little odd in that they don't play into the final grade
+    for the course. Demos must be passed with at least a letter grade of "PW".
+    As long as all demos pass this barrier, the student passes the class overall.
+    """
     weight = 0
     
     def __init__(self, name:str="NOT SET", pointsPossible:int=20,
@@ -334,22 +344,27 @@ class Demo(Grade):
         super().__init__(name, pointsPossible, pointsEarned)
 
     def getLetter(self) -> str:
+        """ uses a different grading scheme """
         return super().getLetter(['U', "IP", "PW", 'P', 'E'])
 
     def needsRetake(self) -> bool:
+        """ demos must exceed this letter grade to pass """
         return self.getLetter() == "IP"
 
     def retake(self) -> None:
+        """ allows students to retake their demos - students get one opportunity
+        to do so if their demo doesn't pass the first time
+        """
         try:
             newPoints:int = None
             print("Enter the new # of points earned out of",
                   str(self.pointsPossible), "or !q to cancel:")
-            newPoints:str = self.getPosInt() #may throw RE or VE
+            newPoints:str = self.getPosInt()
             self.pointsEarned = newPoints
         except ValueError as ve:
             print(ve)
             self.retake()
-        except RecursionError as re: #user cancels or recursion depth exceeded
-            print(re) #return to calling scope
+        except RecursionError as re:
+            print(re)
 
 #~~~~~~~~~~~~~~~~~~~END CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
