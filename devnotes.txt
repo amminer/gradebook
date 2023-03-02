@@ -1,5 +1,4 @@
-Should BST.display be BST.__str__?
-
-left off cleaning up comments and docs at class Exam -
-discovered some interesting stub-code for a feature I wanted to implement
-when I first wrote this program, will probably include that as part of this project.
+3/1 we talked about how exceptions != control flow...
+    am I abusing exceptions here? It seems like it, but the structure of my code is built around this
+    is the user cancelling or quitting an "exceptional" circumstance? It does break normal flow,
+        tells us that we need to discard any data we've been gathering for some operation...
