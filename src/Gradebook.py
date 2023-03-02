@@ -1,4 +1,5 @@
-from Grade import *  # Util, Grade and subclasses, container typehints
+from Util import *
+from Grade import Grade, Asgmt, Exam, Demo
 from Student import Student
 from BST import BST
 
@@ -22,14 +23,14 @@ class Gradebook(Util):
         """
         try:
             print("Enter the name of the new student:")
-            name = self.getStr(1)  # may throw RE or VE
+            name = getStr(1)  # may throw RE or VE
             newStudent = Student(name)
             self._students.insert(newStudent)
         except ValueError as ve:
             print(ve)
             return self.addStudentFromStdin()
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
         return
 
     def removeStudentFromStdin(self):
@@ -41,13 +42,13 @@ class Gradebook(Util):
             return
         try:
             print("Enter the name of the student to remove:")
-            name = self.getStr(1)  # may raise VE
+            name = getStr(1)  # may raise VE
             self._students.remove(name)  # may raise VE
         except ValueError as ve:
             print(ve)
             return self.removeStudentFromStdin()
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
         return
 
     def lookupStudentFromStdin(self):
@@ -60,7 +61,7 @@ class Gradebook(Util):
             return
         try:
             print("Enter the name of the student:")
-            name = self.getStr(1)  # may raise VE
+            name = getStr(1)  # may raise VE
             thatOne = self._students.lookup(name)
             if thatOne != None:
                 print(thatOne)
@@ -71,8 +72,8 @@ class Gradebook(Util):
             print(ve)
             return self.lookupStudentFromStdin()
 
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
 
         return
 
@@ -86,7 +87,7 @@ class Gradebook(Util):
             return
         try:
             print("Enter the name of the student to edit:")
-            name = self.getStr(1)  # may raise VE
+            name = getStr(1)  # may raise VE
             thatOne = self._students.lookup(name)
             if thatOne != None:
                 thatOne.mainloop()
@@ -97,8 +98,8 @@ class Gradebook(Util):
             print(ve)
             return self.editStudentFromStdin()
 
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
 
         return
 
@@ -114,7 +115,7 @@ class Gradebook(Util):
         """ top level menu for the program """
         cont = True
         print(" ___ "
-              , "/ _ \\   _________________________", "|O O|  / Hi, I'm Clippy!         \\", "||U|||<  Welcome to Gradebook.py! |", "||_||| \\__________________________/", "\\\\_//", sep='\n')
+              , "/ _ \\   _________________________", "|O O|  / Hi, I'm Clippy!         \\", "||U|||<  Welcome to Gradebook.py!｜", "||_||| \\_________________________/", "\\\\_//", sep='\n')
         while cont:
             try:
                 self.presentInterface(
@@ -131,7 +132,7 @@ class Gradebook(Util):
                      self.lookupStudentFromStdin,
                      self.editStudentFromStdin,
                      self.display])
-            except RecursionError as re:
+            except UserCancelsException as canceled:
                 cont = False
                 print("Thanks for stopping by!")
             except ValueError as ve:

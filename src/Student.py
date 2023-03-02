@@ -1,5 +1,5 @@
 from Util import *
-from Grade import *
+from Grade import Grade, Demo, Asgmt, Exam
 from LLL import LLL
 import numpy as np
 
@@ -76,7 +76,7 @@ class Student(Util):
             print("Which is the type of the new grade?",
                   "{Exam}", "Proficicency {Demo}", "or Programming {Asgmt}?",
                   "({!q} to cancel)", sep='\n')
-            type = self.getStr(4).lower()
+            type = getStr(4).lower()
             if type == "exam":
                 newGrade = Exam()
             elif type == "demo":
@@ -89,8 +89,8 @@ class Student(Util):
                 self._addGrade(newGrade)
             else:
                 print("Canceled addition")
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
         except ValueError as ve:
             print(ve)
             self.addFromStdin()
@@ -106,10 +106,10 @@ class Student(Util):
         try:
             print("Enter the name of the grade you'd like to remove",
             "or {!q} to cancel:", sep='\n')
-            name = self.getStr(1)
+            name = getStr(1)
             self._removeGrade(name)
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
         except ValueError as ve:
             print(ve)
             self.removeFromStdin()
@@ -124,10 +124,10 @@ class Student(Util):
         """ UI for retaking (editing) a student's demo grade """
         print("Enter the name of the demo to retake, or {!q} to cancel:")
         try:
-            choice = self.getStr(1)
+            choice = getStr(1)
             self.retakeDemo(choice)
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
         except ValueError as ve:
             print(ve)
             self.retakeDemoFromStdin()
@@ -141,7 +141,7 @@ class Student(Util):
             try:
                 print("Would you like to {add} a question, {rem}ove a question,",
                     "or {practice}?\n{!q} to cancel")
-                choice = self.getStr().lower()
+                choice = getStr().lower()
                 if choice == "add":
                     thisExam.addMissedQuestion()
                 elif choice == "rem":
@@ -153,8 +153,8 @@ class Student(Util):
             except ValueError as ve:
                 print(ve)
                 self.exam(thatExam)
-            except RecursionError as re:
-                print(re)
+            except UserCancelsException as canceled:
+                print(canceled)
         else:
             raise ValueError(f"Exam {thatExam} not found\n")
 
@@ -162,17 +162,18 @@ class Student(Util):
         """ UI for finding an exam by name to interact with """
         try:
             print("Enter the name of the exam, or {!q} to cancel:")
-            name = self.getStr()
+            name = getStr()
             self.exam(name)
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
         except ValueError as ve:
             print(ve)
             self.examFromStdin()
 
     def retakeDemo(self, thatDemo:Demo):
         """ UI for interacting with a Demo grade (retaking)
-        Note that Demo.retake may raise a RecursionError on user cancellation,
+        Note that Demo.retake may raise a
+        UserCancelsException on user cancellation,
         which must be handled in calling code """
         thisDemo = self._grades.lookup(thatDemo)
         if thisDemo:
@@ -215,7 +216,7 @@ class Student(Util):
                     self.retakeDemoFromStdin, self.examFromStdin,
                     lambda self=self: print(f"{self.cumulativeGrade():.2f}%")])
             
-            except RecursionError as re:
+            except UserCancelsException as canceled:
                 cont = False
                 print("Returning to gradebook...")
 

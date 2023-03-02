@@ -1,4 +1,4 @@
-from Util import Util, List, Dict, Tuple
+from Util import *
 from random import shuffle
 
 """ Amelia Miner;   Grade.py;   5/24/2022
@@ -106,18 +106,18 @@ class Grade(Util):
         try:
             if self.name == "NOT SET":
                 print("Enter a name/title for this grade:")
-                choice = self.getStr(1)
+                choice = getStr(1)
                 self.name = choice
             if self.pointsPossible == float('inf'):
                 print(f"Enter the number of possible points (must be > {self.pointsEarned}):")
-                choice = self.getPosInt()
+                choice = getPosInt()
                 self.pointsPossible = choice
             if self.pointsEarned == -1:
                 print(f"Enter the number of points earned out of {self.pointsPossible}:")
-                choice = self.getPosInt()
+                choice = getPosInt()
                 self.pointsEarned = choice
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
             return False
         except ValueError as ve:
             print(ve)
@@ -128,8 +128,8 @@ class Grade(Util):
         """ UI and business logic for editing an existing grade object """
         try:
             self.editName()
-        except RecursionError as re: #user cancels or recursion depth exceeded
-            print(re) #return to calling scope
+        except UserCancelsException as canceled: #user cancels or recursion depth exceeded
+            print(canceled) #return to calling scope
 
     def getLetter(self, letters:Tuple[str]=['F','D','C','B','A']) -> str:
         """ uses Grade.getPercentage to determine a letter grade;
@@ -192,7 +192,7 @@ class Exam(Grade):
         try:
             print("Apply extra credit to this exam? Enter {y} or {n},\n"
                 + "or {!q} to cancel:")
-            choice = self.getStr(1)
+            choice = getStr(1)
             if choice == 'y':
                 self._extraCredit = True
             elif choice == 'n':
@@ -202,8 +202,8 @@ class Exam(Grade):
         except ValueError as ve:
             print(ve)
             return self.setup(True)
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
             return False
         
         return True
@@ -228,28 +228,28 @@ class Exam(Grade):
         """ adds a missed question to the map """
         print("Enter the new question:")
         try:
-            newQuestion = self.getStr(1)
+            newQuestion = getStr(1)
             print("Enter the correct answer:")
-            newAnswer = self.getStr(1)
+            newAnswer = getStr(1)
             self._questions[newQuestion] = newAnswer
         except ValueError as ve:
             print(ve)
             self.addMissedQuestion()
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
 
     def removeMissedQuestion(self):
         """ removes a missed question from the map """
         toRem:str = ""
         print("Enter the name of the question to remove:")
         try:
-            toRem = self.getStr(1)
+            toRem = getStr(1)
             del self._questions[toRem]
         except (ValueError, KeyError):  #I deeply dislike this syntax
             print(f"{toRem} was not found...")
             self.removeMissedQuestion()
-        except RecursionError as re:         #Why not `except x or y`?
-            print(re) #return to calling scope
+        except UserCancelsException as canceled:
+            print(canceled) # to calling scope
 
     def practice(self):
         answer:str = ""
@@ -259,9 +259,9 @@ class Exam(Grade):
             print(q[0])
             print("Enter your answer:")
             try:
-                answer = self.getStr(1)
+                answer = getStr(1)
                 print ("Correct answer:", q[1], sep='\n')
-            except RecursionError or ValueError as e:
+            except UserCancelsException or ValueError as e:
                 print(e)
                 print("Skipping for now...")
                 continue
@@ -314,10 +314,10 @@ class Asgmt(Grade):
                     continue
                 print(f"For {g.name}, enter the number of points earned "
                     + f"out of {g.pointsPossible}:")
-                choice = self.getPosInt(max=g.pointsPossible) #unnecessary max?
+                choice = getPosInt(max=g.pointsPossible) #unnecessary max?
                 g.pointsEarned = choice
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
             return False
         except ValueError as ve:
             print(ve)
@@ -359,12 +359,12 @@ class Demo(Grade):
             newPoints:int = None
             print("Enter the new # of points earned out of",
                   str(self.pointsPossible), "or !q to cancel:")
-            newPoints:str = self.getPosInt()
+            newPoints:str = getPosInt()
             self.pointsEarned = newPoints
         except ValueError as ve:
             print(ve)
             self.retake()
-        except RecursionError as re:
-            print(re)
+        except UserCancelsException as canceled:
+            print(canceled)
 
 #~~~~~~~~~~~~~~~~~~~END CLASS DEMO~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
