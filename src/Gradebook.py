@@ -23,7 +23,7 @@ class Gradebook(Util):
         """
         try:
             print("Enter the name of the new student:")
-            name = getStr(1)  # may throw RE or VE
+            name = getStr(1)
             newStudent = Student(name)
             self._students.insert(newStudent)
         except ValueError as ve:
@@ -42,8 +42,8 @@ class Gradebook(Util):
             return
         try:
             print("Enter the name of the student to remove:")
-            name = getStr(1)  # may raise VE
-            self._students.remove(name)  # may raise VE
+            name = getStr(1)
+            self._students.remove(name)
         except ValueError as ve:
             print(ve)
             return self.removeStudentFromStdin()
@@ -61,7 +61,7 @@ class Gradebook(Util):
             return
         try:
             print("Enter the name of the student:")
-            name = getStr(1)  # may raise VE
+            name = getStr(1)
             thatOne = self._students.lookup(name)
             if thatOne != None:
                 print(thatOne)
@@ -87,7 +87,7 @@ class Gradebook(Util):
             return
         try:
             print("Enter the name of the student to edit:")
-            name = getStr(1)  # may raise VE
+            name = getStr(1)
             thatOne = self._students.lookup(name)
             if thatOne != None:
                 thatOne.mainloop()

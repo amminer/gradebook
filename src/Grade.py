@@ -128,8 +128,8 @@ class Grade(Util):
         """ UI and business logic for editing an existing grade object """
         try:
             self.editName()
-        except UserCancelsException as canceled: #user cancels or recursion depth exceeded
-            print(canceled) #return to calling scope
+        except UserCancelsException as canceled:
+            print(canceled)
 
     def getLetter(self, letters:Tuple[str]=['F','D','C','B','A']) -> str:
         """ uses Grade.getPercentage to determine a letter grade;
@@ -245,11 +245,11 @@ class Exam(Grade):
         try:
             toRem = getStr(1)
             del self._questions[toRem]
-        except (ValueError, KeyError):  #I deeply dislike this syntax
+        except (ValueError, KeyError):
             print(f"{toRem} was not found...")
             self.removeMissedQuestion()
         except UserCancelsException as canceled:
-            print(canceled) # to calling scope
+            print(canceled)
 
     def practice(self):
         answer:str = ""

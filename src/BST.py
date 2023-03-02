@@ -110,7 +110,7 @@ class BST():
                 root.right = newNode
                 newNode.parent = root
         else: #new == existing data
-            #want to pass newData out but don't want to print bulky objects...
+            # want to pass newData out but don't want to print bulky objects...
             raise ValueError(f"Invalid input! No duplicate values allowed\n")
 
     def remove(self, key) -> None:
