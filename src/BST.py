@@ -3,9 +3,9 @@ CLASS BST + NODE
 Binary search tree without self-balancing and its node.
 """
 
-#~~~~~~~~~~~~~~~~~~~~~~~CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~CLASS TNODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-class Node():
+class TNode():
     """ a node in the tree contains references to its parent, children,
     and its data
     """
@@ -36,30 +36,30 @@ class Node():
         return self._left
     @left.setter
     def left(self, newLeft):
-        if isinstance(newLeft, Node) or newLeft == None:
+        if isinstance(newLeft, TNode) or newLeft == None:
             self._left = newLeft
         else:
-            raise ValueError(f"A {type(newLeft)} is not a Node!\n")
+            raise ValueError(f"A {type(newLeft)} is not a TNode!\n")
 
     @property
     def right(self):
         return self._right
     @right.setter
     def right(self, newRight):
-        if isinstance(newRight, Node) or newRight == None:
+        if isinstance(newRight, TNode) or newRight == None:
             self._right = newRight
         else:
-            raise ValueError(f"A {type(newRight)} is not a Node!\n")
+            raise ValueError(f"A {type(newRight)} is not a TNode!\n")
 
     @property
     def parent(self):
         return self._parent
     @parent.setter
     def parent(self, newParent):
-        if isinstance(newParent, Node) or newParent == None:
+        if isinstance(newParent, TNode) or newParent == None:
             self._parent = newParent
         else:
-            raise ValueError(f"A {type(newParent)} is not a Node!\n")
+            raise ValueError(f"A {type(newParent)} is not a TNode!\n")
 
 #~~~~~~~~~~~~~~~~~~~END CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -72,43 +72,43 @@ class BST():
     
     def __len__(self) -> int:
         return self.lenRecursive(self._root)
-    def lenRecursive(self, root:Node) -> int:
-        if not root:
+    def lenRecursive(self, thisNode:TNode) -> int:
+        if not thisNode:
             return 0
         else:
             return 1 \
-                 + self.lenRecursive(root.left) \
-                 + self.lenRecursive(root.right)
+                 + self.lenRecursive(thisNode.left) \
+                 + self.lenRecursive(thisNode.right)
 
     def display(self):
         """ display the data contained in the tree by inorder traversal """
         self.__displayRecursive(self._root)
-    def __displayRecursive(self, root:Node):
+    def __displayRecursive(self, thisNode:TNode):
         """ helper for public-facing dispay function """
-        if root:
-            self.__displayRecursive(root.left)
-            print(root.data)
-            self.__displayRecursive(root.right)
+        if thisNode:
+            self.__displayRecursive(thisNode.left)
+            print(thisNode.data)
+            self.__displayRecursive(thisNode.right)
 
     def insert(self, newData):
-        newNode = Node(data=newData)
+        newNode = TNode(data=newData)
         if not self._root:
             self._root = newNode
         else:
             self.__insertRecursive(self._root, newNode)
-    def __insertRecursive(self, root:Node, newNode:Node):
-        if newNode.data < root.data:
-            if root.left:
-                self.__insertRecursive(root.left, newNode)
+    def __insertRecursive(self, thisNode:TNode, newNode:TNode):
+        if newNode.data < thisNode.data:
+            if thisNode.left:
+                self.__insertRecursive(thisNode.left, newNode)
             else:
-                root.left = newNode
-                newNode.parent = root
-        elif newNode.data > root.data:
-            if root.right:
-                self.__insertRecursive(root.right, newNode)
+                thisNode.left = newNode
+                newNode.parent = thisNode
+        elif newNode.data > thisNode.data:
+            if thisNode.right:
+                self.__insertRecursive(thisNode.right, newNode)
             else:
-                root.right = newNode
-                newNode.parent = root
+                thisNode.right = newNode
+                newNode.parent = thisNode
         else: #new == existing data
             # want to pass newData out but don't want to print bulky objects...
             raise ValueError(f"Invalid input! No duplicate values allowed\n")
@@ -122,7 +122,7 @@ class BST():
             if toRemove != None:
                 return self.__remove(toRemove)
         raise ValueError(f"Unable to find {key}\n")
-    def __remove(self, root:Node != None) -> None:
+    def __remove(self, thisNode:TNode != None) -> None:
         """ internal method for removing a node using a reference to it;
         should only be called by public-facing remove function.
         There are 3 broad cases (2 children, 1 child, and leaf)
@@ -142,56 +142,56 @@ class BST():
         Finally, in all cases, set the node to None.
         """
         # 1. case two children
-        if root.left and root.right:
-            inOrderSuccessor = self.__findSmallest(root.right)
+        if thisNode.left and thisNode.right:
+            inOrderSuccessor = self.__findSmallest(thisNode.right)
             # swap inorder successor with this node
             tempData = inOrderSuccessor.data
-            inOrderSuccessor.data = root.data
-            root.data = tempData
+            inOrderSuccessor.data = thisNode.data
+            thisNode.data = tempData
             self.__remove(inOrderSuccessor)
         # 2. case one child
-        elif (root.left and not root.right) or (root.right and not root.left):
+        elif (thisNode.left and not thisNode.right) or (thisNode.right and not thisNode.left):
             # a. case root
-            if root == self._root:
-                if root.left:
-                    self._root = root.left
+            if thisNode == self._root:
+                if thisNode.left:
+                    self._root = thisNode.left
                 else:
-                    self._root = root.right
+                    self._root = thisNode.right
             # b. case not root
             else:
-                if root.left:
-                    if root.parent.left == root:
-                        root.parent.left = root.left
+                if thisNode.left:
+                    if thisNode.parent.left == thisNode:
+                        thisNode.parent.left = thisNode.left
                     else:
-                        root.parent.right = root.left
-                    root.left.parent = root.parent
+                        thisNode.parent.right = thisNode.left
+                    thisNode.left.parent = thisNode.parent
                 else:
-                    if root.parent.left == root:
-                        root.parent.left = root.right
+                    if thisNode.parent.left == thisNode:
+                        thisNode.parent.left = thisNode.right
                     else:
-                        root.parent.right = root.right
-                    root.right.parent = root.parent
-            root = None
+                        thisNode.parent.right = thisNode.right
+                    thisNode.right.parent = thisNode.parent
+            thisNode = None
         # 3. case no children
         else:
             # a. case root
-            if root == self._root:
+            if thisNode == self._root:
                 self._root = None
             # b. case not root (leaf)
             else:
-                if root.parent.left == root:
-                    root.parent.left = None
+                if thisNode.parent.left == thisNode:
+                    thisNode.parent.left = None
                 else:
-                    root.parent.right = None
-            root = None
-    def __findSmallest(self, root:Node):
+                    thisNode.parent.right = None
+            thisNode = None
+    def __findSmallest(self, thisNode:TNode):
         """ helper for public facing remove function
         (finds inorder successor)
         """
-        if not root.left:
-            return root
+        if not thisNode.left:
+            return thisNode
         else:
-            return self.__findSmallest(root.left)
+            return self.__findSmallest(thisNode.left)
 
     def lookup(self, key):
         """ finds and returns the data of a node whose data matches key
@@ -202,16 +202,16 @@ class BST():
             return ret.data
         return None
 
-    def __findNode(self, root:Node, key) -> Node or None:
+    def __findNode(self, thisNode:TNode, key) -> TNode or None:
         """ helper for public facing remove and lookup functions """
-        if not root:
+        if not thisNode:
             return None
-        elif root.data == key:
-            return root
+        elif thisNode.data == key:
+            return thisNode
         else:
-            ret = self.__findNode(root.left, key)
+            ret = self.__findNode(thisNode.left, key)
             if not ret:
-                ret = self.__findNode(root.right, key)
+                ret = self.__findNode(thisNode.right, key)
             return ret
 
 #~~~~~~~~~~~~~~~~~~~END CLASS BST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#

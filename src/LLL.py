@@ -3,9 +3,9 @@ CLASS LLL + CLASS NODE
 Singly linked linear list and its node.
 """
 
-#~~~~~~~~~~~~~~~~~~~~~~~CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~~~~~CLASS LNODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-class Node():
+class LNode():
     """ Stores a reference to another node (next) and some data (data) """
     def __init__(self, newData = None):
         self.next = None
@@ -23,8 +23,8 @@ class Node():
     
     @next.setter
     def next(self, newNext):
-        if type(newNext) != Node and newNext != None:
-            raise ValueError("Node.next must be a Node.\n")
+        if type(newNext) != LNode and newNext != None:
+            raise ValueError("LNode.next must be a LNode.\n")
         else:
             self._next = newNext
 
@@ -45,24 +45,24 @@ class Node():
 class LLL():
     """ stores a collection of nodes by managing their "next" references """
     def __init__(self):
-        self._head:Node = None
+        self._head:LNode = None
     
     def __str__(self):
         """ returns the contents of the list as a multiline string """
         if not self._head:
             return "Empty\n"
         return self._strRecursive(self._head)
-    def _strRecursive(self, head:Node, ret:str = "") -> str:
+    def _strRecursive(self, thisNode:LNode, ret:str = "") -> str:
         """ recursive implementation for stringifying list contents """
-        if not head:
+        if not thisNode:
             return ret
         else:
-            return ret + str(head.data) + '\n' \
-                 + self._strRecursive(head.next, ret) + '\n'
+            return ret + str(thisNode.data) + '\n' \
+                 + self._strRecursive(thisNode.next, ret) + '\n'
 
     def __len__(self):
         return self._countNodesRecursive(self._head)
-    def _countNodesRecursive(self, thisNode:Node) -> int:
+    def _countNodesRecursive(self, thisNode:LNode) -> int:
         """ recursive implementation for counting nodes """
         if not thisNode:
             return 0
@@ -75,7 +75,7 @@ class LLL():
         if type(ret) == bool and not ret:
             raise IndexError(f"Index {index} out of range!\n")
         return ret
-    def _getAtRecursive(self, thisNode:Node, index:int):
+    def _getAtRecursive(self, thisNode:LNode, index:int):
         """ recursive implementation for finding list item at index """
         if not thisNode or index < 0:
             return False
@@ -87,15 +87,15 @@ class LLL():
     def pushBack(self, newData):
         """ appends a data item to the list """
         if not self._head:
-            self._head = Node(newData)
+            self._head = LNode(newData)
         else:
             self._pushBackRecursive(self._head, newData)
-    def _pushBackRecursive(self, thisNode:Node, newData):
+    def _pushBackRecursive(self, thisNode:LNode, newData):
         """ recursive implementation for appending a node to the list
         MUST not be called with thisNode=None
         """
         if not thisNode.next:
-            thisNode.next = Node(newData)
+            thisNode.next = LNode(newData)
         else:
             self._pushBackRecursive(thisNode.next, newData)
 
@@ -109,7 +109,7 @@ class LLL():
             raise ValueError(f"{key} was not found\n")
         else:
             self._remove(thatPrev, thatOne)
-    def _findPairRecursive(self, thisNode:Node, key):
+    def _findPairRecursive(self, thisNode:LNode, key):
         """ recursive implementation for finding a node by key
         also keeps track of the previous node to reconnect list on removal
         """
@@ -123,7 +123,7 @@ class LLL():
             return thisNode, thisNode.next
         else:
             return self._findPairRecursive(thisNode.next, key)
-    def _remove(self, thatPrev:Node, thatNode:Node):
+    def _remove(self, thatPrev:LNode, thatNode:LNode):
         """ removes thatNode and reconnects the list around it
         thatPrev may be None!
         """
@@ -139,9 +139,9 @@ class LLL():
         """ finds a node in the list according to its data == key 
         returns None if node cannot be found
         """
-        ret:Node = self._findRecursive(self._head, key)
+        ret:LNode = self._findRecursive(self._head, key)
         return ret
-    def _findRecursive(self, thisNode:Node, key):
+    def _findRecursive(self, thisNode:LNode, key):
         """ recursive implementation for finding a node """
         if not thisNode:
             return None

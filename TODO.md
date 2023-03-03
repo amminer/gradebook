@@ -23,8 +23,6 @@ IN PROGRESS
 ===
 
 <ul>
-    <li>Add custom exception instead of overusing recursionerror</li>
-        <ul><li>1 day</li></ul>
     <li>Rename head/root params in data structure functions for clarity</li>
         <ul><li>1 day</li></ul>
 </ul>
@@ -34,6 +32,8 @@ DONE
 ===
 
 <ul>
+    <li>Add custom exception instead of overusing recursionerror</li>
+        <ul><li>1 day</li></ul>
     <li>Clean up comments</li>
         <ul><li>1 day</li></ul>
     <li>Add documentation</li>
