@@ -1,13 +1,13 @@
 import __init__
 from random import randint, shuffle
-from BST import Node, BST
+from BST import TNode, BST
 
 """ Amelia Miner;   test_bst.py;  6/5/2022 """
 
 def test_nodeSetters():
-    a = Node(data=1)
-    b = Node(data=2)
-    c = Node(data=3)
+    a = TNode(data=1)
+    b = TNode(data=2)
+    c = TNode(data=3)
     d = "bread"
     e = 4
     a.left = b

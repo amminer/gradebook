@@ -1,5 +1,5 @@
 """ Amelia Miner;   BST.py;   6/5/2022
-CLASS BST + NODE
+CLASS BST + TNODE
 Binary search tree without self-balancing and its node.
 """
 
@@ -61,7 +61,7 @@ class TNode():
         else:
             raise ValueError(f"A {type(newParent)} is not a TNode!\n")
 
-#~~~~~~~~~~~~~~~~~~~END CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~END CLASS TNODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 #~~~~~~~~~~~~~~~~~~~~~~~CLASS BST~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 

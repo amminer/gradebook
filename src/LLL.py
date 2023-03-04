@@ -1,5 +1,5 @@
 """ Amelia Miner;   LLL.py;   6/1/2022
-CLASS LLL + CLASS NODE
+CLASS LLL + CLASS LNODE
 Singly linked linear list and its node.
 """
 
@@ -36,7 +36,7 @@ class LNode():
     def data(self, newData):
         self._data = newData
 
-#~~~~~~~~~~~~~~~~~~~END CLASS NODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+#~~~~~~~~~~~~~~~~~~~END CLASS LNODE~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
 
 
