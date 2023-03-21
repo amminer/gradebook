@@ -1,3 +1,4 @@
+import os
 from Util import *
 from Grade import Grade, Asgmt, Exam, Demo
 from Student import Student
@@ -132,12 +133,18 @@ class Gradebook(Util):
                      self.lookupStudentFromStdin,
                      self.editStudentFromStdin,
                      self.display])
+                clear_terminal()
             except UserCancelsException as canceled:
                 cont = False
                 print("Thanks for stopping by!")
             except ValueError as ve:
                 print(ve)
 
+def clear_terminal():
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
 
 if __name__ == "__main__":
     Gradebook().mainloop()

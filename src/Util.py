@@ -92,7 +92,6 @@ class Util:
             for opt in options:
                 if opt == choice:
                     return routines[options.index(opt)]()
-                    break
             else:
                 raise ValueError(f"{choice} is not a valid option\n")
         except ValueError as ve:
