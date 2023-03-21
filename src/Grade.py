@@ -255,7 +255,9 @@ class Exam(Grade):
         answer:str = ""
         if not self._questions:
             print("Nothing to practice!")
-        for q in shuffle(list(self._questions.items())):
+        question_answer_pairs = list(self._questions.items())
+        shuffle(question_answer_pairs)
+        for q in question_answer_pairs:
             print(q[0])
             print("Enter your answer:")
             try:

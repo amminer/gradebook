@@ -91,7 +91,7 @@ class Util:
             choice = getStr()
             for opt in options:
                 if opt == choice:
-                    routines[options.index(opt)]()
+                    return routines[options.index(opt)]()
                     break
             else:
                 raise ValueError(f"{choice} is not a valid option\n")

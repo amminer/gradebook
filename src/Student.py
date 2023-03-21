@@ -73,18 +73,13 @@ class Student(Util):
     def addFromStdin(self):
         """ UI for adding a grade to the student's list """
         try:
-            print("Which is the type of the new grade?",
-                  "{Exam}", "Proficicency {Demo}", "or Programming {Asgmt}?",
-                  "({!q} to cancel)", sep='\n')
-            type = getStr(4).lower()
-            if type == "exam":
-                newGrade = Exam()
-            elif type == "demo":
-                newGrade = Demo()
-            elif type == "asgmt":
-                newGrade = Asgmt()
-            else:
-                raise ValueError("Input must match exam, demo, asgmt, or !q\n")
+            newGrade = self.presentInterface(
+                "Which is the type of the new grade?"
+                + "{exam}, Proficicency {demo},"
+                + "or Programming {asgmt}?\n"
+                +"({!q} to cancel)",
+            ["exam", "demo", "asgmt"],
+            [Exam, Demo, Asgmt])
             if newGrade.setup():
                 self._addGrade(newGrade)
             else:
@@ -139,17 +134,14 @@ class Student(Util):
         thisExam = self._grades.lookup(thatExam)
         if thisExam:
             try:
-                print("Would you like to {add} a question, {rem}ove a question,",
-                    "or {practice}?\n{!q} to cancel")
-                choice = getStr().lower()
-                if choice == "add":
-                    thisExam.addMissedQuestion()
-                elif choice == "rem":
-                    thisExam.removeMissedQuestion()
-                elif choice == "practice":
-                    thisExam.practice()
-                else:
-                    raise ValueError(f"{choice} is not a valid selection\n")
+                self.presentInterface(
+                    "Would you like to {add} a question, "
+                    + "{rem}ove a question, "
+                    + "or {practice}?\n{!q} to cancel",
+                    ["add", "rem", "practice"],
+                    [thisExam.addMissedQuestion,
+                     thisExam.removeMissedQuestion,
+                     thisExam.practice])
             except ValueError as ve:
                 print(ve)
                 self.exam(thatExam)
