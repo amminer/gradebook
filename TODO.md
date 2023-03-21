@@ -17,8 +17,6 @@ IN PROGRESS
 ===
 
 <ul>
-    <li>Change display to clear screen on new menus</li>
-        <ul><li>1 day</li></ul>
 </ul>
 
 
@@ -26,6 +24,8 @@ DONE
 ===
 
 <ul>
+    <li>Change display to clear screen on new menus</li>
+        <ul><li>1 day</li></ul>
     <li>Ensure all menus go through Util class</li>
         <ul><li>1 day</li></ul>
     <li>Rename head/root params in data structure functions for clarity</li>
